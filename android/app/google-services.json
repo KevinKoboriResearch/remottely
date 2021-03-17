@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "128986273803",
+    "project_id": "remottely-firestore",
+    "storage_bucket": "remottely-firestore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128986273803:android:0eacdcc95a1f3438e9cf0e",
+        "android_client_info": {
+          "package_name": "com.example.remottely"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128986273803-0h3au4a6o462ne3aiitaa1n596hi7ktg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.remottely",
+            "certificate_hash": "4d8cb7d04de73bd964421d5ede8a910fb8da891c"
+          }
+        },
+        {
+          "client_id": "128986273803-75a18t7mku1m4qp3vsj6ipsrmfag0bc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-aj8vscsoBNh7HM7_yV7Hs1xXnrGqTBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128986273803-75a18t7mku1m4qp3vsj6ipsrmfag0bc6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
