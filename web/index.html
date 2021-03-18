@@ -30,9 +30,49 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <!-- <script src="/__/firebase/8.3.0/firebase-app.js"></script>
+  <script src="/__/firebase/8.3.0/firebase-analytics.js"></script>
+  <script src="/__/firebase/init.js"></script> -->
+<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyDP-5M9liw9nVKhzzrAFzykovFAy9YQVio",
+    authDomain: "remottely-firestore.firebaseapp.com",
+    projectId: "remottely-firestore",
+    storageBucket: "remottely-firestore.appspot.com",
+    messagingSenderId: "128986273803",
+    appId: "1:128986273803:web:aab2630197848af9e9cf0e",
+    measurementId: "G-HKFLRFE95E"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+<meta name="google-signin-client_id" content="128986273803-huogjfh1hijfsvrqn85p41ek5fiffb1m.apps.googleusercontent.com">
+  <!-- <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-auth.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQUTrZVXRzlR1WK5Xe0deTawiP0urxfpg"></script>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyCQUTrZVXRzlR1WK5Xe0deTawiP0urxfpg",
+      authDomain: "remottely-key-firebase.firebaseapp.com",
+      databaseURL: "https://remottely-key-firebase.firebaseio.com",
+      projectId: "remottely-key-firebase",
+      storageBucket: "remottely-key-firebase.appspot.com",
+      messagingSenderId: "574923192048",
+      appId: "1:574923192048:web:d7a2a3af82ac53e9ba3435",
+      measurementId: "G-8PQKX0HYQQ"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script> -->
+
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('flutter-first-frame', function () {
