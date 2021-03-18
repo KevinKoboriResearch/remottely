@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:remottely/models/user_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:remottely/views/settings_screen.dart';
+import 'package:remottely/views/profile_screen.dart';
 import 'package:remottely/widgets/router/user_app_state.dart';
 import 'package:remottely/views/user_detail_screen.dart';
-import 'package:remottely/widgets/router/fade_animation_page.dart';
+import 'package:remottely/widgets/router/animations/fade_animation_page.dart';
 import 'package:remottely/routes/routes.dart';
 import 'package:remottely/views/users_list_screen.dart';
+import 'package:remottely/views/shop_screen.dart';
+import 'package:remottely/views/orders_screen.dart';
+import 'package:remottely/views/search_screen.dart';
 
 class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<UserRoutePath> {
@@ -43,23 +46,24 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
             ),
         ] else if (appState.selectedIndex == 1)
           FadeAnimationPage(
-            child: SettingsScreen(),
-            key: ValueKey('SettingsPage'),
+            child: SearchScreen(),
+            key: ValueKey('SearchPage'),
           ),
-        //     FadeAnimationPage(
-        //       child: Error404Screen(),
-        //       key: ValueKey('SettingsPage'),
-        //     ),
-        // else if (appState.selectedIndex == 1)
-        //     FadeAnimationPage(
-        //       child: SettingsScreen(),
-        //       key: ValueKey('SettingsPage'),
-        //     ),
-        // else
-        //     FadeAnimationPage(
-        //       child: Error404Screen(),
-        //       key: ValueKey('SettingsPage'),
-        //     ),
+        if (appState.selectedIndex == 2)
+          FadeAnimationPage(
+            child: ShopScreen(),
+            key: ValueKey('shopPage'),
+          ),
+        if (appState.selectedIndex == 3)
+          FadeAnimationPage(
+            child: OrdersScreen(),
+            key: ValueKey('ordersPage'),
+          ),
+        if (appState.selectedIndex == 4)
+          FadeAnimationPage(
+            child: ProfileScreen(),
+            key: ValueKey('ProfilePage'),
+          ),
       ],
       onPopPage: (route, result) {
         appState.selectedUser = null;

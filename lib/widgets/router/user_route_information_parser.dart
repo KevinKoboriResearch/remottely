@@ -9,8 +9,14 @@ class UserRouteInformationParser extends RouteInformationParser<UserRoutePath> {
 
     if (uri.pathSegments.isEmpty || uri.pathSegments.first == 'users') {
       return UsersListPath();
-    } else if (uri.pathSegments.first == 'settings') {
-      return UsersSettingsPath();
+    } else if (uri.pathSegments.first == 'search') {
+      return SearchPath();
+    } else if (uri.pathSegments.first == 'shop') {
+      return ShopPath();
+    } else if (uri.pathSegments.first == 'orders') {
+      return OrdersPath();
+    } else if (uri.pathSegments.first == 'profile') {
+      return ProfilePath();
     } else {
       if (uri.pathSegments.length >= 2) {
         if (uri.pathSegments[0] == 'user') {
@@ -26,11 +32,20 @@ class UserRouteInformationParser extends RouteInformationParser<UserRoutePath> {
     if (configuration is UsersListPath) {
       return RouteInformation(location: '/users');
     }
-    if (configuration is UsersSettingsPath) {
-      return RouteInformation(location: '/settings');
-    }
     if (configuration is UsersDetailsPath) {
       return RouteInformation(location: '/user/${configuration.id}');
+    }
+    if (configuration is SearchPath) {
+      return RouteInformation(location: '/search');
+    }
+    if (configuration is ShopPath) {
+      return RouteInformation(location: '/shop');
+    }
+    if (configuration is OrdersPath) {
+      return RouteInformation(location: '/orders');
+    }
+    if (configuration is ProfilePath) {
+      return RouteInformation(location: '/profile');
     }
     return null;
   }

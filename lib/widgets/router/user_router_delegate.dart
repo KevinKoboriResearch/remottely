@@ -15,14 +15,20 @@ class UserRouterDelegate extends RouterDelegate<UserRoutePath>
   }
 
   UserRoutePath get currentConfiguration {
-    if (appState.selectedIndex == 1) {
-      return UsersSettingsPath();
-    } else if (appState.selectedIndex == 0) {
+    if (appState.selectedIndex == 0) {
       if (appState.selectedUser == null) {
         return UsersListPath();
       } else {
         return UsersDetailsPath(appState.getSelectedUserById());
       }
+    } else if (appState.selectedIndex == 1) {
+      return SearchPath();
+    } else if (appState.selectedIndex == 2) {
+      return ShopPath();
+    } else if (appState.selectedIndex == 3) {
+      return OrdersPath();
+    } else if (appState.selectedIndex == 4) {
+      return ProfilePath();
     } else {
       return Error404Path();
     }
@@ -56,10 +62,19 @@ class UserRouterDelegate extends RouterDelegate<UserRoutePath>
     if (path is UsersListPath) {
       appState.selectedIndex = 0;
       appState.selectedUser = null;
-    } else if (path is UsersSettingsPath) {
+    } else if (path is SearchPath) {
       appState.selectedIndex = 1;
+    } else if (path is ShopPath) {
+      appState.selectedIndex = 2;
+    } else if (path is OrdersPath) {
+      appState.selectedIndex = 3;
+    } else if (path is ProfilePath) {
+      appState.selectedIndex = 4;
     } else if (path is UsersDetailsPath) {
       appState.setSelectedUserById(path.id);
     }
+    // else {
+    //   appState.selectedUser = null;
+    // }
   }
 }

@@ -20,7 +20,7 @@ class UsersAppState extends ChangeNotifier {
     _selectedIndex = idx;
     // if (_selectedIndex == 1) {
     //   // Remove this line if you want to keep the selected user when navigating
-    //   // between "settings" and "home" which user was selected when Settings is
+    //   // between "" and "home" which user was selected when  is
     //   // tapped.
     //   selectedUser = null;
     // }

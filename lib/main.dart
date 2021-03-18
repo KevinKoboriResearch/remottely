@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:remottely/widgets/router/user_router_delegate.dart';
 import 'package:remottely/widgets/router/user_route_information_parser.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -18,6 +19,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: ThemeData(
+        primarySwatch: Colors.deepOrange,
+        focusColor: Colors.transparent,
+        hintColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+      ),
+      debugShowCheckedModeBanner: false,
       title: 'Remottely',
       routerDelegate: _routerDelegate,
       routeInformationParser: _routeInformationParser,
