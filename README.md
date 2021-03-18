@@ -1,5 +1,5 @@
 # remottely
-flutter run -d chrome — web-hostname localhost — web-port 8080
+flutter run -d chrome --web-port 8080
 
 # path navigation flutter tutorials
 https://www.youtube.com/watch?v=FBoAXUkHu44

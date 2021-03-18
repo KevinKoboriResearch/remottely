@@ -1,23 +1,25 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:remottely/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
+// import 'package:remottely/utils/app_routes.dart';
 
-class ProfileScreen extends StatefulWidget {
+class Cart extends StatefulWidget {
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _CartState createState() => _CartState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
-      body: Center(
-        child: Container(
+      appBar: AppBar(),
+      body: Builder(
+        builder: (context) => Container(
           alignment: Alignment.center,
-          color: Colors.blueGrey.shade900,
+          color: Colors.green,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -50,15 +52,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: Text('Logout'),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  color: Colors.black,
-                ),
-                onPressed: () {
-                  // Navigator.of(context).pushReplacementNamed(AppRoutes.CART);
-                },
-              ),
+              // IconButton(
+              //   icon: Icon(
+              //     Icons.menu,
+              //     color: Colors.black,
+              //   ),
+              //   onPressed: () {
+              //     Navigator.of(context).pushNamed(AppRoutes.CART);
+              //   },
+              // ),
             ],
           ),
         ),

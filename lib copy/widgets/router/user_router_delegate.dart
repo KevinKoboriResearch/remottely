@@ -20,22 +20,22 @@ class UserRouterDelegate extends RouterDelegate<UserRoutePath>
   }
 
   UserRoutePath get currentConfiguration {
-    if (appState.selectedUser != null) {
-      return UsersDetailsPath(appState.getSelectedUserById());
-    } else {
-      if (appState.selectedIndex == 0) {
+    if (appState.selectedIndex == 0) {
+      if (appState.selectedUser == null) {
         return UsersListPath();
-      } else if (appState.selectedIndex == 1) {
-        return SearchPath();
-      } else if (appState.selectedIndex == 2) {
-        return ShopPath();
-      } else if (appState.selectedIndex == 3) {
-        return OrdersPath();
-      } else if (appState.selectedIndex == 4) {
-        return ProfilePath();
       } else {
-        return Error404Path();
+        return UsersDetailsPath(appState.getSelectedUserById());
       }
+    } else if (appState.selectedIndex == 1) {
+      return SearchPath();
+    } else if (appState.selectedIndex == 2) {
+      return ShopPath();
+    } else if (appState.selectedIndex == 3) {
+      return OrdersPath();
+    } else if (appState.selectedIndex == 4) {
+      return ProfilePath();
+    } else {
+      return Error404Path();
     }
   }
 
@@ -82,6 +82,29 @@ class UserRouterDelegate extends RouterDelegate<UserRoutePath>
           Center(child: CircularProgressIndicator()),
         ],
       );
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Navigator(
+  //     key: navigatorKey,
+  //     pages: [
+  //       MaterialPage(
+  //         child: AppShell(appState: appState),
+  //       ),
+  //     ],
+  //     onPopPage: (route, result) {
+  //       if (!route.didPop(result)) {
+  //         return false;
+  //       }
+
+  //       if (appState.selectedUser != null) {
+  //         appState.selectedUser = null;
+  //       }
+  //       notifyListeners();
+  //       return true;
+  //     },
+  //   );
+  // }
 
   @override
   Future<void> setNewRoutePath(UserRoutePath path) async {
