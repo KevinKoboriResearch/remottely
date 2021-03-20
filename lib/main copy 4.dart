@@ -22,8 +22,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      theme: 
-      ThemeData(
+      theme: ThemeData(
         primarySwatch: Colors.deepOrange,
         focusColor: Colors.transparent,
         hintColor: Colors.transparent,

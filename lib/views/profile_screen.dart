@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:remottely/provider/google_sign_in.dart';
+import 'package:remottely/providers/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -10,9 +10,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+    final auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       body: Center(
         child: Container(
@@ -29,16 +29,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(height: 8),
               CircleAvatar(
                 maxRadius: 25,
-                backgroundImage: NetworkImage(user.photoURL),
+                backgroundImage: NetworkImage(auth.currentUser.photoURL),
               ),
               SizedBox(height: 8),
               Text(
-                'Name: ' + user.displayName,
+                'Name: ' + auth.currentUser.displayName,
                 style: TextStyle(color: Colors.white),
               ),
               SizedBox(height: 8),
               Text(
-                'Email: ' + user.email,
+                'Email: ' + auth.currentUser.email,
                 style: TextStyle(color: Colors.white),
               ),
               SizedBox(height: 8),

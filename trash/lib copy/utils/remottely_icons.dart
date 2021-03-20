@@ -63,7 +63,7 @@ class RemottelyIcons {
   RemottelyIcons._();
 
   static const _kFontFam = 'RemottelyIcons';
-  static const String? _kFontPkg = null;
+  static const String _kFontPkg = null;
 
   static const IconData ok = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData ok_circle = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);

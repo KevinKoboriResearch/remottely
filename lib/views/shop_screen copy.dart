@@ -281,46 +281,76 @@ class _ShopScreenState extends State<ShopScreen> {
                       leading: Container(),
                       // leadingWidth: 0,
                       // titleSpacing: 100,
-                      flexibleSpace: Padding(
-                          // decoration: BoxDecoration(
-                          //   // border: Border.all(
-                          //   //   color: Colors.grey.withOpacity(0.5),
-                          //   //   width: 1.0,
-                          //   // ),
-                          //   borderRadius: BorderRadius.circular(4.0),
-                          // ),
-                          padding: EdgeInsets.all(12),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Expanded(
-                              child: TextField(
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.grey[200],
-                                  filled: true,
-                                  prefixIcon: Icon(Icons.search),
-                                  border: InputBorder.none,
-                                  hintText: "Search by Name",
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 8),
-                                  isDense: true,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
+                      flexibleSpace: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.5),
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        margin: EdgeInsets.all(12),
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(left: 8),
+                              child: Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                                size: 20,
+                              ),
+                            ),
+                            new Expanded(
+                              child: Theme(
+                                data: Theme.of(context)
+                                    .copyWith(splashColor: Colors.transparent),
+                                child: TextField(
+                                  autofocus: false,
+                                  style: TextStyle(
+                                      fontSize: 22.0, color: Color(0xFFbdc6cf)),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    hintText: 'Username',
+                                    contentPadding: const EdgeInsets.only(
+                                        left: 14.0, bottom: 8.0, top: 8.0),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(25.7),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(25.7),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              //         TextField(
-                              //   style: TextStyle(color: Colors.red),
-                              //   decoration: InputDecoration(
-                              //     fillColor: Colors.orange,
-                              //     filled: true,
-                              //     prefixIcon: Icon(Icons.search),
-                              //   ),
-                              // )
-                            ),
-                          )),
+//                               TextField(
+//                                 cursorColor: Colors.green,
+// background
+//                                 keyboardType: TextInputType.text,
+//                                 decoration: InputDecoration(
+//                                   hoverColor: Colors.red,
+//                                   focusColor: Colors.red,
+//                                   fillColor: Colors.red,
+//                                   border: InputBorder.none,
+//                                   hintText: "Search by Name",
+//                                   hintStyle: TextStyle(color: Colors.grey),
+//                                   contentPadding: EdgeInsets.symmetric(
+//                                       vertical: 8, horizontal: 8),
+//                                   isDense: true,
+//                                 ),
+//                                 style: TextStyle(
+//                                   fontSize: 14.0,
+//                                   color: Colors.black,
+//                                 ),
+//                               ),
+                            )
+                          ],
+                        ),
+                      ),
                       // Container(height: 1000, width:1000, color: Colors.red),
                       // FlexibleSpaceBar(
                       //   // background: Stack(

@@ -17,8 +17,13 @@ class UsersAppState extends ChangeNotifier {
   int get selectedIndex => _selectedIndex;
 
   set selectedIndex(int idx) {
-    _selectedIndex = idx;
-    // if (_selectedIndex == 1) {
+    // if (_selectedIndex == idx) {
+    //   // return;
+    //   // _selectedIndex = 4;
+    // } else {
+    // }
+      _selectedIndex = idx;
+    // if (_selectedIndex != 0) {
     //   // Remove this line if you want to keep the selected user when navigating
     //   // between "" and "home" which user was selected when  is
     //   // tapped.

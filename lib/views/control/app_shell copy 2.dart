@@ -3,6 +3,16 @@ import 'package:flutter/foundation.dart';
 import 'package:remottely/widgets/router/user_app_state.dart';
 import 'package:remottely/widgets/router/inner_router_delegate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:remottely/widgets/router/user_app_state.dart';
+import 'package:remottely/views/control/app_shell.dart';
+import 'package:remottely/routes/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:remottely/providers/google_sign_in.dart';
+import 'package:remottely/widgets/sign_up_widget.dart';
+import 'package:provider/provider.dart';
 
 class AppShell extends StatefulWidget {
   final UsersAppState appState;
@@ -46,15 +56,75 @@ class _AppShellState extends State<AppShell> {
   @override
   Widget build(BuildContext context) {
     var appState = widget.appState;
-
+    Widget buildLoading() => Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+                width: 300, height: 200, child: CircularProgressIndicator()),
+          ],
+        );
     // Claim priority, If there are parallel sub router, you will need
     // to pick which one should take priority;
     _backButtonDispatcher.takePriority();
 
+    // Scaffold(
+    //   body: ChangeNotifierProvider(
+    //     create: (context) => GoogleSignInProvider(),
+    //     child: StreamBuilder(
+    //       stream: FirebaseAuth.instance.authStateChanges(),
+    //       builder: (context, snapshot) {
+    //         final provider = Provider.of<GoogleSignInProvider>(context);
+
+    //         if (provider.isSigningIn) {
+    //           return buildLoading();
+    //         } else if (snapshot.hasData) {
+    //           return Navigator(
+    //             key: navigatorKey,
+    //             pages: [
+    //               MaterialPage(
+    //                 child: AppShell(appState: appState),
+    //               ),
+    //             ],
+    //             onPopPage: (route, result) {
+    //               if (!route.didPop(result)) {
+    //                 return true;
+    //               }
+
+    //               if (appState.selectedUser != null) {
+    //                 appState.selectedUser = null;
+    //               }
+    //               notifyListeners();
+    //               return true;
+    //             },
+    //           );
+    //         } else {
+    //           return SignUpWidget();
+    //         }
+    //       },
+    //     ),
+    //   ),
+    // );
     return Scaffold(
-      body: Router(
-        routerDelegate: _routerDelegate,
-        backButtonDispatcher: _backButtonDispatcher,
+      body: ChangeNotifierProvider(
+        create: (context) => GoogleSignInProvider(),
+        child: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            final provider = Provider.of<GoogleSignInProvider>(context);
+
+            if (provider.isSigningIn) {
+              return buildLoading();
+            } else if (snapshot.hasData) {
+              return Router(
+                routerDelegate: _routerDelegate,
+                backButtonDispatcher: _backButtonDispatcher,
+              );
+            } else {
+              return Container(
+                width: 300, height: 200, color: Colors. red, child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -88,11 +158,13 @@ class _AppShellState extends State<AppShell> {
           BottomNavigationBarItem(
             icon: CircleAvatar(
               maxRadius: 16,
-              backgroundColor: appState.selectedIndex == 4 ? Colors.black : Colors.transparent,
-              child: CircleAvatar(
-                maxRadius: 14,
-                backgroundImage: NetworkImage(auth.currentUser.photoURL),
-              ),
+              backgroundColor: appState.selectedIndex == 4
+                  ? Colors.black
+                  : Colors.transparent,
+              // child: CircleAvatar(
+              //   maxRadius: 14,
+              //   backgroundImage: NetworkImage(auth.currentUser.photoURL),
+              // ),
             ),
             label: 'profile',
           ),

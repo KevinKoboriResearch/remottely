@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:remottely/provider/google_sign_in.dart';
+import 'package:remottely/providers/google_sign_in.dart';
 import 'package:remottely/utils/remottely_icons.dart';
 import 'package:provider/provider.dart';
 

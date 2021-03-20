@@ -4,10 +4,11 @@ import 'package:remottely/widgets/router/user_app_state.dart';
 import 'package:remottely/views/control/app_shell.dart';
 import 'package:remottely/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:remottely/provider/google_sign_in.dart';
+import 'package:remottely/providers/google_sign_in.dart';
 import 'package:remottely/widgets/sign_up_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:remottely/widgets/global/build_loading.dart';
 
 class UserRouterDelegate extends RouterDelegate<UserRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<UserRoutePath> {
@@ -42,45 +43,85 @@ class UserRouterDelegate extends RouterDelegate<UserRoutePath>
   Widget build(BuildContext context) => Scaffold(
         body: ChangeNotifierProvider(
           create: (context) => GoogleSignInProvider(),
-          child: StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              final provider = Provider.of<GoogleSignInProvider>(context);
+          child: kIsWeb
+              ? FutureBuilder(
+                  future: Future.delayed(Duration(milliseconds: 500))
+                      .then((_) => FirebaseAuth.instance.authStateChanges()),
+                  builder: (context, snapshot) {
+                    return StreamBuilder(
+                      stream: FirebaseAuth.instance.authStateChanges(),
+                      builder: (context, snapshot) {
+                        final provider =
+                            Provider.of<GoogleSignInProvider>(context);
+// appState.selectedIndex =null;
+                        if (provider.isSigningIn) {
+                          return buildLoading();
+                        } else if (!snapshot.hasData) {
+                          return SignUpWidget();
+                        } else {
+                          if (appState.selectedIndex == null) {
+                            appState.selectedIndex = 0;
+                          }
+                          return Navigator(
+                            key: navigatorKey,
+                            pages: [
+                              MaterialPage(
+                                child: AppShell(appState: appState),
+                              ),
+                            ],
+                            onPopPage: (route, result) {
+                              if (!route.didPop(result)) {
+                                return true;
+                              }
 
-              if (provider.isSigningIn) {
-                return buildLoading();
-              } else if (snapshot.hasData) {
-                return Navigator(
-                  key: navigatorKey,
-                  pages: [
-                    MaterialPage(
-                      child: AppShell(appState: appState),
-                    ),
-                  ],
-                  onPopPage: (route, result) {
-                    if (!route.didPop(result)) {
-                      return false;
-                    }
-
-                    if (appState.selectedUser != null) {
-                      appState.selectedUser = null;
-                    }
-                    notifyListeners();
-                    return true;
+                              if (appState.selectedUser != null) {
+                                appState.selectedUser = null;
+                              }
+                              notifyListeners();
+                              return true;
+                            },
+                          );
+                        }
+                      },
+                    );
                   },
-                );
-              } else {
-                return SignUpWidget();
-              }
-            },
-          ),
+                )
+              : StreamBuilder(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (context, snapshot) {
+                    final provider = Provider.of<GoogleSignInProvider>(context);
+// appState.selectedIndex =null;
+                    if (provider.isSigningIn) {
+                      return buildLoading();
+                    } else if (!snapshot.hasData) {
+                      return SignUpWidget();
+                    } else {
+                      if (appState.selectedIndex == null) {
+                        appState.selectedIndex = 0;
+                      }
+                      return Navigator(
+                        key: navigatorKey,
+                        pages: [
+                          MaterialPage(
+                            child: AppShell(appState: appState),
+                          ),
+                        ],
+                        onPopPage: (route, result) {
+                          if (!route.didPop(result)) {
+                            return true;
+                          }
+
+                          if (appState.selectedUser != null) {
+                            appState.selectedUser = null;
+                          }
+                          notifyListeners();
+                          return true;
+                        },
+                      );
+                    }
+                  },
+                ),
         ),
-      );
-  Widget buildLoading() => Stack(
-        fit: StackFit.expand,
-        children: [
-          Center(child: CircularProgressIndicator()),
-        ],
       );
 
   @override
