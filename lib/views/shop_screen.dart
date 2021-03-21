@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:remottely/providers/products.dart';
-import 'package:remottely/widgets/products_grid.dart';
-import 'package:remottely/widgets/badge.dart';
-import 'package:remottely/widgets/app_drawer.dart';
-import 'package:remottely/providers/cart.dart';
-import 'package:remottely/utils/app_routes.dart';
+// import 'package:remottely/providers/products.dart';
+import 'package:remottely/widgets/product/products_grid.dart';
+// import 'package:remottely/widgets/badge.dart';
+// import 'package:remottely/widgets/app_drawer.dart';
+// import 'package:remottely/providers/cart.dart';
+// import 'package:remottely/utils/app_routes.dart';
 import 'package:remottely/utils/my_flutter_app_icons.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/foundation.dart' show kIsWeb;
@@ -22,7 +22,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 enum FilterOptions {
   Favorite,
   All,
@@ -36,7 +36,7 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen> {
   bool _showFavoriteOnly = false;
   bool _isLoading = true;
-
+  final auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();
@@ -50,19 +50,22 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       extendBody: false,
       body: Builder(
         builder: (context) => StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection('products')
-              // .where(
-              //   "deviceUsers",
-              //   arrayContains:
-              //       // "userEmail": auth.currentUser.email.toLowerCase(),
-              //       auth.currentUser.uid,
-              //   // "userName": auth.currentUser.displayName.toLowerCase(),
-              // )
-              // .orderBy("deviceProperty")
+            //  .collection('companies')
+            // //  .doc('RPJkEiX3yxV2ZWH19LNHDZyCdZ33')
+            //   .where(
+            //     "companyManagers",
+            //     arrayContains: auth.currentUser.uid,
+            //   )
+              .collection('devices')
+              .where(
+                "deviceManagers",
+                arrayContains: auth.currentUser.uid,
+              )
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -321,81 +324,6 @@ class _ShopScreenState extends State<ShopScreen> {
                               // )
                             ),
                           )),
-                      // Container(height: 1000, width:1000, color: Colors.red),
-                      // FlexibleSpaceBar(
-                      //   // background: Stack(
-                      //   //   children: <Widget>[
-                      //   //     Center(
-                      //   //       child: FadeInImage(
-                      //   //         height: 220,
-                      //   //         width: (kIsWeb
-                      //   //             ? 507
-                      //   //             : MediaQuery.maybeOf(context)
-                      //   //                 .size
-                      //   //                 .width), //* 0.95,
-                      //   //         placeholder: AssetImage('assets/logo/logo.png'),
-                      //   //         image: snapshot.data['deviceImageUrl'] != '' ||
-                      //   //                 snapshot.data['deviceImageUrl'] != null
-                      //   //             ? NetworkImage(
-                      //   //                 snapshot.data['deviceImageUrl'])
-                      //   //             : AssetImage('assets/logo/logo.png'),
-                      //   //         fit: BoxFit.cover,
-                      //   //       ),
-                      //   //     ),
-                      //   //     // Center(
-                      //   //     //   child: Padding(
-                      //   //     //     padding: const EdgeInsets.only(top: 48.0),
-                      //   //     //     child: Container(
-                      //   //     //       width: (kIsWeb
-                      //   //     //           ? 507
-                      //   //     //           : MediaQuery.maybeOf(context).size.width),
-                      //   //     //       color: AppColors.astratosDarkGreyColor
-                      //   //     //           .withOpacity(0.3),
-                      //   //     //     ),
-                      //   //     //   ),
-                      //   //     // ),
-                      //   //   ],
-                      //   // ),
-                      //   background: Container(
-                      //     decoration: BoxDecoration(
-                      //       border: Border.all(
-                      //         color: Colors.grey.withOpacity(0.5),
-                      //         width: 1.0,
-                      //       ),
-                      //       borderRadius: BorderRadius.circular(4.0),
-                      //     ),
-                      //     margin: EdgeInsets.all(12),
-                      //     child: Row(
-                      //       children: <Widget>[
-                      //         Padding(
-                      //           padding: EdgeInsets.only(left: 8),
-                      //           child: Icon(
-                      //             Icons.search,
-                      //             color: Colors.grey,
-                      //             size: 20,
-                      //           ),
-                      //         ),
-                      //         new Expanded(
-                      //           child: TextField(
-                      //             keyboardType: TextInputType.text,
-                      //             decoration: InputDecoration(
-                      //               border: InputBorder.none,
-                      //               hintText: "Search by Name",
-                      //               hintStyle: TextStyle(color: Colors.grey),
-                      //               contentPadding: EdgeInsets.symmetric(
-                      //                   vertical: 8, horizontal: 8),
-                      //               isDense: true,
-                      //             ),
-                      //             style: TextStyle(
-                      //               fontSize: 14.0,
-                      //               color: Colors.black,
-                      //             ),
-                      //           ),
-                      //         )
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
                     ),
                     ProductsGrid(snapshot),
                   ],
@@ -405,7 +333,7 @@ class _ShopScreenState extends State<ShopScreen> {
           },
         ),
       ),
-      drawer: AppDrawer(),
+      // drawer: AppDrawer(),
     );
   }
 }

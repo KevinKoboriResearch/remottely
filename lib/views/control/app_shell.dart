@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:remottely/widgets/router/user_app_state.dart';
-import 'package:remottely/widgets/router/inner_router_delegate.dart';
+import 'package:remottely/utils/my_flutter_app_icons.dart';
+import 'package:remottely/router/user_app_state.dart';
+import 'package:remottely/utils/remottely_icons.dart';
+import 'package:remottely/router/inner_router_delegate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AppShell extends StatefulWidget {
@@ -52,56 +54,60 @@ class _AppShellState extends State<AppShell> {
     _backButtonDispatcher.takePriority();
 
     return Scaffold(
+      extendBody: false,
       body: Router(
         routerDelegate: _routerDelegate,
         backButtonDispatcher: _backButtonDispatcher,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: [
-          BottomNavigationBarItem(
-            // icon: Icon(Icons.verified_user, color: Colors.black),
-            icon: appState.selectedIndex == 0
-                ? Icon(Icons.search, color: Colors.black)
-                : Icon(Icons.menu, color: Colors.black),
-            label: 'users',
-          ),
-          // backgroundColor: Colors.yellow[700]),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search, color: Colors.black),
-            label: 'search',
-          ),
-          // backgroundColor: Colors.blue),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu, color: Colors.black),
-            label: 'shop',
-          ),
-          // backgroundColor: Colors.grey),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.car_rental, color: Colors.black),
-            label: 'orders',
-          ),
-          // backgroundColor: Colors.green),
-          BottomNavigationBarItem(
-            icon: CircleAvatar(
-              maxRadius: 16,
-              backgroundColor: appState.selectedIndex == 4 ? Colors.black : Colors.transparent,
-              child: CircleAvatar(
-                maxRadius: 14,
-                backgroundImage: NetworkImage(auth.currentUser.photoURL),
-              ),
+      bottomNavigationBar: SizedBox(
+        // height: 50,
+        child: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          iconSize: 30.0,
+          type: BottomNavigationBarType.fixed,
+          elevation: 0,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: [
+            BottomNavigationBarItem(
+              icon: appState.selectedIndex == 0
+                  ? Icon(Icons.home, color: Colors.black)
+                  : Icon(Icons.home_outlined, color: Colors.black),
+              label: 'users',
             ),
-            label: 'profile',
-          ),
-          // backgroundColor: Colors.red),
-        ],
-        currentIndex: appState.selectedIndex,
-        onTap: (newIndex) {
-          appState.selectedIndex = newIndex;
-        },
+            BottomNavigationBarItem(
+              icon: appState.selectedIndex == 1
+                  ? Icon(Icons.search_off, color: Colors.black)
+                  : Icon(Icons.search, color: Colors.black),
+              label: 'search',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(RemottelyIcons.shopping_bag, color: Colors.black),
+              label: 'shop',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(MyFlutterApp.history, color: Colors.black),
+              label: 'orders',
+            ),
+            BottomNavigationBarItem(
+              icon: CircleAvatar(
+                maxRadius: 16,
+                backgroundColor: appState.selectedIndex == 4
+                    ? Colors.black
+                    : Colors.transparent,
+                child: CircleAvatar(
+                  maxRadius: 14,
+                  backgroundImage: NetworkImage(auth.currentUser.photoURL),
+                ),
+              ),
+              label: 'profile',
+            ),
+          ],
+          currentIndex: appState.selectedIndex,
+          onTap: (newIndex) {
+            appState.selectedIndex = newIndex;
+          },
+        ),
       ),
       // bottomNavigationBar : new BottomNavigationBar(
       //   currentIndex: appState.selectedIndex,

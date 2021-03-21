@@ -80,6 +80,8 @@ class RemottelyIcons {
   static const IconData cart_arrow_down = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData heart_1 = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData heart_2 = IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData location_on = IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData shop = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData checkmark_cicle = IconData(0xe87f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData crowned_heart = IconData(0xe980, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData gear_heart = IconData(0xe9dc, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -91,10 +93,12 @@ class RemottelyIcons {
   static const IconData google = IconData(0xf1a0, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   // static const IconData cart_plus = IconData(0xf217, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   // static const IconData cart_arrow_down = IconData(0xf218, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData shopping_bag = IconData(0xf290, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   // static const IconData shopping_basket = IconData(0xf291, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData checklist = IconData(0xf301, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData shield_check = IconData(0xf33e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData check = IconData(0xf369, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData user_check = IconData(0xf4fc, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData users_cog = IconData(0xf509, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData door_closed = IconData(0xf52a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

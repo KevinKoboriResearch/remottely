@@ -1,45 +1,128 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:remottely/widgets/router/user_router_delegate.dart';
-import 'package:remottely/widgets/router/user_route_information_parser.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
-  UserRouterDelegate _routerDelegate = UserRouterDelegate();
-  UserRouteInformationParser _routeInformationParser =
-      UserRouteInformationParser();
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  File _selectedFile;
+  bool _inProcess = false;
+
+  Widget getImageWidget() {
+    if (_selectedFile != null) {
+      return Image.file(
+        _selectedFile,
+        width: 250,
+        height: 250,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image.asset(
+        "assets/placeholder.jpg",
+        width: 250,
+        height: 250,
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
+  getImage(ImageSource source) async {
+      this.setState((){
+        _inProcess = true;
+      });
+      File image = await ImagePicker.pickImage(source: source);
+      if(image != null){
+        File cropped = await ImageCropper.cropImage(
+            sourcePath: image.path,
+            aspectRatio: CropAspectRatio(
+                ratioX: 1, ratioY: 1),
+            compressQuality: 100,
+            maxWidth: 700,
+            maxHeight: 700,
+            compressFormat: ImageCompressFormat.jpg,
+            androidUiSettings: AndroidUiSettings(
+              toolbarColor: Colors.deepOrange,
+              toolbarTitle: "RPS Cropper",
+              statusBarColor: Colors.deepOrange.shade900,
+              backgroundColor: Colors.white,
+            )
+        );
+
+        this.setState((){
+          _selectedFile = cropped;
+          _inProcess = false;
+        });
+      } else {
+        this.setState((){
+          _inProcess = false;
+        });
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-        focusColor: Colors.transparent,
-        hintColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-        primaryColor: Colors.red,
-        brightness: Brightness.light,
-        // textSelectionHandleColor: Colors.blue,
-        // textSelectionColor: Colors.blue,
-        // disabledColor: Colors.blue,
-        scaffoldBackgroundColor: Colors.yellow,
-      ),
-      debugShowCheckedModeBanner: false,
-      title: 'Remottely',
-      routerDelegate: _routerDelegate,
-      routeInformationParser: _routeInformationParser,
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              getImageWidget(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  MaterialButton(
+                      color: Colors.green,
+                      child: Text(
+                        "Camera",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        getImage(ImageSource.camera);
+                      }),
+                  MaterialButton(
+                      color: Colors.deepOrange,
+                      child: Text(
+                        "Device",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        getImage(ImageSource.gallery);
+                      })
+                ],
+              )
+            ],
+          ),
+          (_inProcess)?Container(
+            color: Colors.white,
+            height: MediaQuery.of(context).size.height * 0.95,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ):Center()
+        ],
+      )
     );
   }
 }

@@ -3,8 +3,8 @@ class AuthException implements Exception {
     "EMAIL_EXISTS": "E-mail existe!",
     "OPERATION_NOT_ALLOWED": "Operação não permitida!",
     "TOO_MANY_ATTEMPTS_TRY_LATER": "Tente mais tarde!",
-    "EMAIL_NOT_FOUND": "E-mail não encontrado!",
-    "INVALID_PASSWORD": "Senha inválida!",
+    "EMAIL_NOT_FOUND": "E-mail não encontrado\nou\nsenha inválida!",
+    "INVALID_PASSWORD": "E-mail não encontrado\nou\nsenha inválida!",
     "USER_DISABLED": "Usuário desativado!",
   };
 
@@ -14,7 +14,7 @@ class AuthException implements Exception {
 
   @override
   String toString() {
-    if(errors.containsKey(key)) {
+    if (errors.containsKey(key)) {
       return errors[key];
     } else {
       return "Ocorreu um erro na autenticação!";

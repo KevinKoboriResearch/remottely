@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:remottely/models/user_model.dart';
+import 'package:remottely/models/current_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:remottely/models/user_model.dart';
 import 'package:flutter/foundation.dart';
