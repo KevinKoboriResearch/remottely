@@ -12,25 +12,24 @@ import 'package:remottely/widgets/design/app_clipper.dart';
 import 'package:remottely/utils/constants.dart';
 import 'package:remottely/functions/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:remottely/data/firestore/product_triggered_collection.dart';
-import 'package:remottely/data/firestore/products_collection.dart';
+// import 'package:remottely/data/firestore/products_collection.dart';
 
 class ProductsCollection {
   final auth = FirebaseAuth.instance;
 
-  Future<void> productInsert(product) async {
-//GeoPoint(product.latitude, product.longitude),
-    await FirebaseFirestore.instance.collection('products').add({
+  Future<void> productInsert(companyId, product) async {
+    await FirebaseFirestore.instance.collection('companies').doc(companyId).collection('products').add({
+      'companyTitle': product.companyTitle,
       'title': product.title,
-      'desc': product.desc,
-      'location': product.location,
+      'description': product.description,
+      'price': product.price,
       'image': {
         'imageUrl': '',
         'imageHeight': 1,
         'imageWidth': 1,
       },
       'interested': [],
-      'verified': false,
+      'promotionPrice': product.promotionPrice,
     });
   }
 
@@ -114,7 +113,7 @@ class ProductsCollection {
         .collection("products")
         .doc('${product.id}')
         .update({
-      'sers': usersList,
+      'users': usersList,
     });
   }
 

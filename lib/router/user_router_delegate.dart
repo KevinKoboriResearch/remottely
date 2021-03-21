@@ -45,7 +45,7 @@ class UserRouterDelegate extends RouterDelegate<UserRoutePath>
           create: (context) => GoogleSignInProvider(),
           child: kIsWeb
               ? FutureBuilder(
-                  future: Future.delayed(Duration(milliseconds: 500))
+                  future: Future.delayed(Duration(milliseconds: 1000))
                       .then((_) => FirebaseAuth.instance.authStateChanges()),
                   builder: (context, snapshot) {
                     return StreamBuilder(

@@ -1,22 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-// import 'package:remottely/providers/auth.dart';
-import 'package:remottely/utils/my_flutter_app_icons.dart';
-// import 'package:remottely/providers/widget.devicesSnapshot.dart';
-// import 'package:remottely/providers/cart.dart';
-// import 'package:remottely/utils/app_routes.dart';
-// import 'package:remottely/utils/app_routes.dart';
-import 'package:flutter/material.dart';
-import 'package:remottely/utils/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:remottely/utils/my_flutter_app_icons.dart';
-// import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductGridItem extends StatefulWidget {
-  final devicesSnapshot;
-  ProductGridItem(this.devicesSnapshot);
+  final snapshotProduct;
+  ProductGridItem(this.snapshotProduct);
   @override
   _ProductGridItemState createState() => _ProductGridItemState();
 }
@@ -28,18 +16,20 @@ class _ProductGridItemState extends State<ProductGridItem> {
       padding: EdgeInsets.all(6.0),
       child: Column(
         children: [
+          Spacer(),
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: Hero(
-              tag: widget.devicesSnapshot.id,
-              child: FadeInImage(
-                placeholder: AssetImage('assets/images/kevinkobori.jpg'),
-                image: NetworkImage(
-                    widget.devicesSnapshot['deviceImage']['deviceImageUrl']),
-                fit: BoxFit.cover,
+              tag: widget.snapshotProduct.id,
+              child: CachedNetworkImage(
+                imageUrl: widget.snapshotProduct['image']['url'],
+                placeholder: (context, url) => new CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    Center(child: Icon(Icons.error)),
               ),
             ),
           ),
+          Spacer(),
           SizedBox(
             height: 4,
           ),
@@ -53,7 +43,7 @@ class _ProductGridItemState extends State<ProductGridItem> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'REMOTTELY', //widget.devicesSnapshot['deviceTitle'],
+                          widget.snapshotProduct['title'],
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -63,7 +53,7 @@ class _ProductGridItemState extends State<ProductGridItem> {
                           ),
                         ),
                         Text(
-                          'Camisa colorida da moda tal tal tal tal tal tal tal tal tal tal tal tal tal',
+                          widget.snapshotProduct['subtitle'],
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[600],
@@ -71,30 +61,38 @@ class _ProductGridItemState extends State<ProductGridItem> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
-                        Container(
-                          child: Row(
-                            children: [
-                              Text(
-                                '' + '80.900', //acima de tanto, remover os centavos?
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[500],
-                                  decoration: TextDecoration.lineThrough
-                                ),
+                        Row(
+                          children: [
+                            Text(
+                              'R\$ ' +
+                                  widget.snapshotProduct['price']
+                                      .toString(), //acima de tanto, remover os centavos?
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                                decoration:
+                                    widget.snapshotProduct['pricePromotion'] !=
+                                            ''
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none,
                               ),
-                              Text(
-                                ' / R\$ ' + '50.900',//acima de tanto, remover os centavos?
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.red[800],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                            widget.snapshotProduct['pricePromotion'] != ''
+                                ? Text(
+                                    ' / R\$ ' +
+                                        widget.snapshotProduct['pricePromotion']
+                                            .toString(), //acima de tanto, remover os centavos?
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.red[800],
+                                    ),
+                                  )
+                                : Container(),
+                          ],
                         ),
                       ],
                     );

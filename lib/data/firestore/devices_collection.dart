@@ -12,24 +12,28 @@ import 'package:remottely/widgets/design/app_clipper.dart';
 import 'package:remottely/utils/constants.dart';
 import 'package:remottely/functions/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:remottely/data/firestore/devices_collection.dart';
 
-class CompaniesCollection {
+class DevicesCollection {
   final auth = FirebaseAuth.instance;
 
-  Future<void> productInsert(device) async {
-//GeoPoint(device.latitude, device.longitude),
-    await FirebaseFirestore.instance.collection('companies').doc().collection('devices').add({
-      'title': device.title,
-      'description': device.description,
-      'price': device.price,
-      'image': {
-        'imageUrl': '',
-        'imageHeight': 1,
-        'imageWidth': 1,
-      },
-      'interested': [],
-      'promotionPrice': device.promotionPrice,
+  Future<void> deviceInsert(device) async {
+    List<String> usersList = [auth.currentUser.uid];
+
+    await FirebaseFirestore.instance
+        .collection('companies')
+        .doc('bwBiNTo7yOIUYehamSmD')
+        .collection('products')
+        .add({
+      'deviceProperty': device.deviceProperty,
+      'deviceTitle': device.deviceTitle,
+      'deviceAdress': device.deviceAdress,
+      'deviceLat': device.deviceLat,
+      'deviceLon': device.deviceLon,
+      'deviceTriggerUrl': '', //device.deviceTriggerUrl,
+      'deviceImage': device.deviceImage,
+      'deviceUsers': usersList,
+      'deviceManagers': usersList,
+      'deviceVerified': false,
     });
   }
 
@@ -38,11 +42,31 @@ class CompaniesCollection {
         .collection("devices")
         .doc('${device.id}')
         .update({
-      'title': device.title,
-      'desc': device.desc,
-      'location': device.location,
-      'interested': device,
-      'verified': device,
+      'deviceProperty': device.deviceProperty,
+      'deviceTitle': device.deviceTitle,
+      'deviceAdress': device.deviceAdress,
+      'deviceLat': device.deviceLat,
+      'deviceLon': device.deviceLon,
+      'deviceTriggerUrl': '', //device.deviceTriggerUrl,
+      'deviceImage': device.deviceImage,
+      'deviceUsers': device.deviceUsers,
+      'deviceManagers': device.deviceManagers,
+      'deviceVerified': device.deviceVerified,
+      // // 'deviceProperty': device.deviceProperty,
+      // // 'deviceTitle': device.deviceTitle,
+      // // 'deviceAdress': device.deviceAdress,
+      // // 'deviceLocation': device.deviceLocation,
+      // // 'deviceTriggerUrl': device.deviceTriggerUrl,
+      // // 'deviceImageUrl': device.deviceImageUrl,
+      // 'deviceProperty': device.deviceProperty,
+      // 'deviceTitle': device.deviceTitle,
+      // 'deviceAdress': device.deviceAdress,
+      // // 'deviceLocation': device.deviceLocation,
+      // 'deviceLat': device.deviceLat,
+      // 'deviceLon': device.deviceLon,
+      // 'deviceTriggerUrl': '', //device.deviceTriggerUrl,
+      // 'deviceImageUrl': device.deviceImageUrl,
+      // 'deviceUsers': device.deviceUsers,
     });
   }
 
@@ -63,7 +87,7 @@ class CompaniesCollection {
   FutureOr<QuerySnapshot> userFriendshipsAcceptedNotIncludedSnapshots(
       device) async {
     var friends2 = await userFriendshipsNotAcceptedGet();
-    var usersList = device['sers'] +
+    var usersList = device['deviceUsers'] +
         friends2; //['O6d6DWBuJdQ42n39nLSZb75eWlo1'];//await friendsList();//['yBn39ZCTC2WguLaZGIgkRRFPP6R2'];//
     return FirebaseFirestore.instance
         .collection('users')
@@ -92,9 +116,9 @@ class CompaniesCollection {
   // }
 
   //  Stream<QuerySnapshot> userFriendshipsAcceptedNotIncludedSnapshots(device) {
-  //   // List<String> usersList = ['yBn39ZCTC2WguLaZGIgkRRFPP6R2'];//device['sers'];
+  //   // List<String> usersList = ['yBn39ZCTC2WguLaZGIgkRRFPP6R2'];//device['deviceUsers'];
   //   var usersList = device[
-  //       'sers']; //['O6d6DWBuJdQ42n39nLSZb75eWlo1'];//await friendsList();//['yBn39ZCTC2WguLaZGIgkRRFPP6R2'];//
+  //       'deviceUsers']; //['O6d6DWBuJdQ42n39nLSZb75eWlo1'];//await friendsList();//['yBn39ZCTC2WguLaZGIgkRRFPP6R2'];//
   //   return FirebaseFirestore.instance
   //       .collection('users')
   //       .doc('${auth.currentUser.uid}')
@@ -105,21 +129,21 @@ class CompaniesCollection {
   // }
 
   Future<void> deviceUpdateDeviceUsers(device, usersList) async {
-    // print('${device['sers']}');
-    // var usersList = device['sers'] + [userId];
+    // print('${device['deviceUsers']}');
+    // var usersList = device['deviceUsers'] + [userId];
     //  + [userId];
     // usersList.add(userId);
     await FirebaseFirestore.instance
         .collection("devices")
         .doc('${device.id}')
         .update({
-      'users': usersList,
+      'deviceUsers': usersList,
     });
   }
 
   Future<bool> deviceDelete(deviceId) async {
     FirebaseFirestore.instance
-        .collection('')
+        .collection('devices')
         .doc('$deviceId')
         .delete()
         .then((value) {
@@ -131,7 +155,7 @@ class CompaniesCollection {
 
   Stream<QuerySnapshot> devicesUserSnapshots() {
     return FirebaseFirestore.instance
-        .collection('')
+        .collection('devices')
         .where(
           "deviceUsers",
           arrayContains:
@@ -145,7 +169,7 @@ class CompaniesCollection {
 
   Stream<QuerySnapshot> devicesManagerSnapshots() {
     return FirebaseFirestore.instance
-        .collection('')
+        .collection('devices')
         .where(
           "deviceManagers",
           arrayContains:
@@ -158,12 +182,12 @@ class CompaniesCollection {
   }
 
   // Stream<QuerySnapshot> devicesSnapshots() {
-  //   return FirebaseFirestore.instance.collection('').snapshots();
+  //   return FirebaseFirestore.instance.collection('devices').snapshots();
   // }
 
   // devicesGet() async {
   //   return await FirebaseFirestore.instance
-  //       .collection('')
+  //       .collection('devices')
   //       .where("deviceUsers", arrayContains: {
   //     "userId": auth.currentUser.uid,
   //     // "userEmail": auth.currentUser.email.toLowerCase(),
@@ -173,12 +197,8 @@ class CompaniesCollection {
 
   deviceSnapshots(deviceId) {
     return FirebaseFirestore.instance
-        .collection('')
+        .collection('devices')
         .doc('$deviceId')
         .snapshots();
-  }
-
-  devicesSnapshots() {
-    return FirebaseFirestore.instance.collection('').snapshots();
   }
 }

@@ -1,39 +1,127 @@
 import 'package:flutter/material.dart';
-import 'package:remottely/widgets/google_signup_button_widget.dart';
+import 'package:remottely/providers/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class SignUpWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
         fit: StackFit.expand,
         children: [
-          // CustomPaint(painter: BackgroundPainter()),
-          buildSignUp(),
-        ],
-      );
-
-  Widget buildSignUp() => Column(
-        children: [
-          Container(
-            height: 50,
-          ),
-          Center(
-            child: Text(
-              'REMOTTELY',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.pressed))
+                    return Colors.blue;
+                  return Colors.white;//Color(0xffDDDDDD); // Use the component's default.
+                },
               ),
             ),
+            onPressed: () async {
+              final provider =
+                  Provider.of<GoogleSignInProvider>(context, listen: false);
+              await provider.login(context);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 64),
+                Text(
+                  'R E M O T T E L Y',
+                  style: TextStyle(
+                    // depth: 1,
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontFamily: 'anurati',
+                  ),
+                ),
+                Spacer(flex: 2),
+                Container(
+                  width: 134,
+                  child: Neumorphic(
+                    style: NeumorphicStyle(
+                      depth: 3,
+                      color: Colors.white,//Color(0xffDDDDDD),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'G',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.blue),
+                          ),
+                          Text(
+                            'o',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.red),
+                          ),
+                          Text(
+                            'o',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.yellow[800]),
+                          ),
+                          Text(
+                            'g',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.blue),
+                          ),
+                          Text(
+                            'l',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.green),
+                          ),
+                          Text(
+                            'e',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.red),
+                          ),
+                          // Icon(RemottelyIcons.google,color: Colors.red,),
+                          Text(
+                            ' Login', //'Sign In With ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.grey[600]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Clique na tela',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                ),
+                Spacer(),
+              ],
+            ),
           ),
-          Spacer(flex: 2),
-          GoogleSignupButtonWidget(),
-          SizedBox(height: 12),
-          Text(
-            'Login to continue',
-            style: TextStyle(fontSize: 16),
-          ),
-          Spacer(),
+          // Center(
+          //     child: Padding(
+          //   padding: const EdgeInsets.only(top: 64.0),
+          //   child: Text(
+          //     'Clique na tela',
+          //     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+          //   ),
+          // )),
         ],
       );
 }

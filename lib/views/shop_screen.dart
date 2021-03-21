@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 enum FilterOptions {
   Favorite,
   All,
@@ -50,207 +51,135 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      // backgroundColor: Colors.grey[100],
       extendBody: false,
       body: Builder(
         builder: (context) => StreamBuilder(
           stream: FirebaseFirestore.instance
-            //  .collection('companies')
-            // //  .doc('RPJkEiX3yxV2ZWH19LNHDZyCdZ33')
-            //   .where(
-            //     "companyManagers",
-            //     arrayContains: auth.currentUser.uid,
-            //   )
-              .collection('devices')
-              .where(
-                "deviceManagers",
-                arrayContains: auth.currentUser.uid,
-              )
+              //  .collection('companies')
+              // //  .doc('RPJkEiX3yxV2ZWH19LNHDZyCdZ33')
+              //   .where(
+              //     "companyManagers",
+              //     arrayContains: auth.currentUser.uid,
+              //   )
+              .collection('companies')
+              .doc('bwBiNTo7yOIUYehamSmD')
+              .collection('products')
               .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot> snapshotProducts) {
+            if (snapshotProducts.data.docs.length == 0) {
+              return Stack(
+        fit: StackFit.expand,
+        children: [
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.pressed))
+                    return Colors.blue;
+                  return Colors.white;//Color(0xffDDDDDD); // Use the component's default.
+                },
+              ),
+            ),
+            onPressed: () async {
+              // final provider =
+              //     Provider.of<GoogleSignInProvider>(context, listen: false);
+              // await provider.login(context);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 64),
+                Text(
+                  'R E M O T T E L Y',
+                  style: TextStyle(
+                    // depth: 1,
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontFamily: 'anurati',
+                  ),
+                ),
+                Spacer(flex: 2),
+                Container(
+                  width: 104,
+                  child: Neumorphic(
+                    style: NeumorphicStyle(
+                      depth: 3,
+                      color: Colors.white,//Color(0xffDDDDDD),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                           Text(
+                            'Criar ', //'Sign In With ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.grey[600]),
+                          ),
+                          Text(
+                            'L',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.blue),
+                          ),
+                          Text(
+                            'o',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.red),
+                          ),
+                          Text(
+                            'j',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.yellow[800]),
+                          ),
+                          Text(
+                            'a',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.green),
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Clique na tela',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                ),
+                Spacer(),
+              ],
+            ),
+          ),
+        ],
+      );
+            } else if (!snapshotProducts.hasData) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
             //     return LayoutCustomScrollView(0, DevicesPageList(), 'C H A V E S',
-            //         snapshot, DevicesPageItem(snapshot));
+            //         snapshotProducts, DevicesPageItem(snapshotProducts));
             //   },
             // );
             return Center(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 2.0),
                 width: 1000,
                 child: CustomScrollView(
                   slivers: [
-                    // SliverAppBar(
-                    //   pinned: false,
-                    //   // toolbarHeight: 40,
-                    //   elevation: 0,
-                    //   backgroundColor: Colors.white.withOpacity(1),
-                    //   leading: InkWell(
-                    //     onTap: () => Scaffold.of(context).openDrawer(),
-                    //     child: Icon(Icons.menu, color: Colors.black),
-                    //   ),
-                    //   centerTitle: true,
-                    //   title: Container(
-                    //     width: 60,
-                    //     child: FadeInImage(
-                    //       placeholder:
-                    //           AssetImage('assets/logo/tapanapanterahs.png'),
-                    //       image: AssetImage('assets/logo/tapanapanterahs.png'),
-                    //       fit: BoxFit.cover,
-                    //     ),
-                    //   ),
-                    //   actions: <Widget>[
-                    //     PopupMenuButton(
-                    //       onSelected: (FilterOptions selectedValue) {
-                    //         setState(
-                    //           () {
-                    //             if (selectedValue == FilterOptions.Favorite) {
-                    //               _showFavoriteOnly = true;
-                    //             } else {
-                    //               _showFavoriteOnly = false;
-                    //             }
-                    //           },
-                    //         );
-                    //       },
-                    //       icon: Icon(
-                    //         Icons.more_vert,
-                    //         color: Colors.black,
-                    //       ),
-                    //       itemBuilder: (_) => [
-                    //         PopupMenuItem(
-                    //           child: Text('Somente Favoritos'),
-                    //           value: FilterOptions.Favorite,
-                    //         ),
-                    //         PopupMenuItem(
-                    //           child: Text('Todos'),
-                    //           value: FilterOptions.All,
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     // Consumer<Cart>(
-                    //     //   child: IconButton(
-                    //     //     icon: Icon(
-                    //     //       MyFlutterApp.bag,
-                    //     //       color: Colors.black,
-                    //     //     ),
-                    //     //     onPressed: () {
-                    //     //       // Navigator.of(context)
-                    //     //       //     .pushNamed(AppRoutes.CART);
-                    //     //     },
-                    //     //   ),
-                    //     //   builder: (_, cart, child) => Badge(
-                    //     //     value: cart.itemsCount.toString(),
-                    //     //     child: child,
-                    //     //   ),
-                    //     // )
-                    //   ],
-                    // ),
-                    // SliverAppBar(
-                    //   pinned: true,
-                    //   // toolbarHeight: 40,
-                    //   elevation: 0,
-                    //   leadingWidth: 0,
-                    //   title: Container(
-                    //     decoration: BoxDecoration(
-                    //       border: Border.all(
-                    //         color: Colors.grey.withOpacity(0.5),
-                    //         width: 1.0,
-                    //       ),
-                    //       borderRadius: BorderRadius.circular(4.0),
-                    //     ),
-                    //     margin: EdgeInsets.all(12),
-                    //     child: Row(
-                    //       children: <Widget>[
-                    //         Padding(
-                    //           padding: EdgeInsets.only(left: 8),
-                    //           child: Icon(
-                    //             Icons.search,
-                    //             color: Colors.grey,
-                    //             size: 20,
-                    //           ),
-                    //         ),
-                    //         new Expanded(
-                    //           child: TextField(
-                    //             keyboardType: TextInputType.text,
-                    //             decoration: InputDecoration(
-                    //               border: InputBorder.none,
-                    //               hintText: "Search by Name",
-                    //               hintStyle: TextStyle(color: Colors.grey),
-                    //               contentPadding: EdgeInsets.symmetric(
-                    //                   vertical: 8, horizontal: 8),
-                    //               isDense: true,
-                    //             ),
-                    //             style: TextStyle(
-                    //               fontSize: 14.0,
-                    //               color: Colors.black,
-                    //             ),
-                    //           ),
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    //   backgroundColor: Colors.white.withOpacity(1),
-                    //   leading: Container(),
-                    //   centerTitle: false,
-                    //   // title: Container(
-                    //   //   width: 60,
-                    //   //   child: FadeInImage(
-                    //   //     placeholder: AssetImage(
-                    //   //         'assets/logo/tapanapanterahs.png'),
-                    //   //     image: AssetImage(
-                    //   //         'assets/logo/tapanapanterahs.png'),
-                    //   //     fit: BoxFit.cover,
-                    //   //   ),
-                    //   // ),
-                    // ),
-                    // // SliverToBoxAdapter(
-                    // //   child: SizedBox(height: 2.0),
-                    // // ),
-                    // SliverToBoxAdapter(
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //       border: Border.all(
-                    //         color: Colors.grey.withOpacity(0.5),
-                    //         width: 1.0,
-                    //       ),
-                    //       borderRadius: BorderRadius.circular(4.0),
-                    //     ),
-                    //     margin: EdgeInsets.all(12),
-                    //     child: Row(
-                    //       children: <Widget>[
-                    //         Padding(
-                    //           padding: EdgeInsets.only(left: 8),
-                    //           child: Icon(
-                    //             Icons.search,
-                    //             color: Colors.grey,
-                    //             size: 20,
-                    //           ),
-                    //         ),
-                    //         new Expanded(
-                    //           child: TextField(
-                    //             keyboardType: TextInputType.text,
-                    //             decoration: InputDecoration(
-                    //               border: InputBorder.none,
-                    //               hintText: "Search by Name",
-                    //               hintStyle: TextStyle(color: Colors.grey),
-                    //               contentPadding: EdgeInsets.symmetric(
-                    //                   vertical: 8, horizontal: 8),
-                    //               isDense: true,
-                    //             ),
-                    //             style: TextStyle(
-                    //               fontSize: 14.0,
-                    //               color: Colors.black,
-                    //             ),
-                    //           ),
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                     SliverAppBar(
                       pinned: true,
                       backgroundColor: Colors.white,
@@ -266,7 +195,15 @@ class _ShopScreenState extends State<ShopScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(left: 16.0),
-                                  child: Text('Loja'),
+                                  child: Text(
+                                      snapshotProducts.hasData
+                                          ? snapshotProducts.data.docs[0]
+                                              ['companyTitle']
+                                          : '', //'tapanapanterahs',
+                                      style: TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey[800])),
                                 ),
                               ],
                             ),
@@ -279,53 +216,41 @@ class _ShopScreenState extends State<ShopScreen> {
                       pinned: true,
                       backgroundColor: Colors.white,
                       elevation: 0,
-                      toolbarHeight: 26,
+                      toolbarHeight: 66,
                       // expandedHeight: 186,
-                      leading: Container(),
                       // leadingWidth: 0,
                       // titleSpacing: 100,
-                      flexibleSpace: Padding(
-                          // decoration: BoxDecoration(
-                          //   // border: Border.all(
-                          //   //   color: Colors.grey.withOpacity(0.5),
-                          //   //   width: 1.0,
-                          //   // ),
-                          //   borderRadius: BorderRadius.circular(4.0),
-                          // ),
-                          padding: EdgeInsets.all(12),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Expanded(
-                              child: TextField(
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.grey[200],
-                                  filled: true,
-                                  prefixIcon: Icon(Icons.search),
-                                  border: InputBorder.none,
-                                  hintText: "Search by Name",
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 8),
-                                  isDense: true,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                ),
+                      titleSpacing: 0,
+                      title: Padding(
+                        padding: EdgeInsets.all(12),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Expanded(
+                            child: TextField(
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                fillColor: Colors.grey[200],
+                                filled: true,
+                                prefixIcon: Icon(Icons.search, size: 24),
+                                // prefixStyle: TextStyle(),
+                                border: InputBorder.none,
+                                // labelText: "Search by Name",
+                                hintText: "Search by Name",
+                                hintStyle: TextStyle(color: Colors.grey),
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                isDense: true,
                               ),
-                              //         TextField(
-                              //   style: TextStyle(color: Colors.red),
-                              //   decoration: InputDecoration(
-                              //     fillColor: Colors.orange,
-                              //     filled: true,
-                              //     prefixIcon: Icon(Icons.search),
-                              //   ),
-                              // )
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black,
+                              ),
                             ),
-                          )),
+                          ),
+                        ),
+                      ),
                     ),
-                    ProductsGrid(snapshot),
+                    ProductsGrid(snapshotProducts),
                   ],
                 ),
               ),

@@ -79,7 +79,7 @@ class _AppShellState extends State<AppShell> {
               icon: appState.selectedIndex == 1
                   ? Icon(Icons.search_off, color: Colors.black)
                   : Icon(Icons.search, color: Colors.black),
-              label: 'search',
+              label: 'tapanapanterahs',
             ),
             BottomNavigationBarItem(
               icon: Icon(RemottelyIcons.shopping_bag, color: Colors.black),

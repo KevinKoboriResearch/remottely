@@ -4,17 +4,19 @@ import 'package:flutter/foundation.dart';
 import 'package:remottely/router/user_app_state.dart';
 import 'package:remottely/router/animations/fade_animation_page.dart';
 import 'package:remottely/router/routes.dart';
-import 'package:remottely/views/device/device_form_page.dart';
-import 'package:remottely/views/device/devices_manage_page_list.dart';
-import 'package:remottely/views/device/devices_maps_page.dart';
+// import 'package:remottely/views/device/device_form_page.dart';
+// import 'package:remottely/views/device/devices_manage_page_list.dart';
+// import 'package:remottely/views/device/devices_maps_page.dart';
 import 'package:remottely/views/shop_screen.dart';
-import 'package:remottely/views/device/devices_history_page_list.dart';
-import 'package:remottely/views/device/devices_page_list.dart';
-import 'package:remottely/views/device/device_form_page.dart';
-import 'package:remottely/views/user/user_perfil_page.dart';
-import 'package:remottely/views/users_list_screen.dart';
-import 'package:remottely/views/user_detail_screen.dart';
+// import 'package:remottely/views/device/devices_history_page_list.dart';
+// import 'package:remottely/views/device/devices_page_list.dart';
+import 'package:remottely/views/products/device_form_page.dart';
+// import 'package:remottely/views/user/user_perfil_page.dart';
+// import 'package:remottely/views/users_list_screen.dart';
+// import 'package:remottely/views/user_detail_screen.dart';
 
+import 'package:remottely/providers/google_sign_in.dart';
+import 'package:provider/provider.dart';
 class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<UserRoutePath> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -37,8 +39,8 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
       pages: [
         if (appState.selectedIndex == 0)
           FadeAnimationPage(
-            child: DevicesManagePageList(),
-            key: ValueKey('SearchPage'),
+            child: Container(),
+            key: ValueKey('HomePage'),
           )
         // ...[
         //   FadeAnimationPage(
@@ -56,22 +58,29 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
         // ]
         else if (appState.selectedIndex == 1)
           FadeAnimationPage(
-            child: DevicesPageList(),
+            child: ShopScreen(),
             key: ValueKey('SearchPage'),
           ),
         if (appState.selectedIndex == 2)
           FadeAnimationPage(
-            child: DevicesHistoryPageList(),
+            child: Container(child: ElevatedButton(
+                onPressed: () {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  provider.logout();
+                },
+                child: Text('Logout'),
+              ),),
             key: ValueKey('shopPage'),
           ),
         if (appState.selectedIndex == 3)
           FadeAnimationPage(
-            child: ShopScreen(),
+            child: DeviceFormPage(null),
             key: ValueKey('ordersPage'),
           ),
         if (appState.selectedIndex == 4)
           FadeAnimationPage(
-            child: UserPerfil(),
+            child: Container(),
             key: ValueKey('ProfilePage'),
           ),
       ],

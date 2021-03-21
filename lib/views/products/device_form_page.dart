@@ -44,43 +44,26 @@ import 'package:remottely/utils/my_flutter_app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:remottely/utils/constants.dart';
-import 'package:remottely/views/control/drawer_page.dart';
-import 'package:remottely/widgets/device/devices_page_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:remottely/data/firestore/devices_collection.dart';
-import 'package:remottely/widgets/layouts/layout_custom_scroll_view.dart';
-import 'package:remottely/views/device/device_form_page.dart';
 
-import 'package:remottely/views/device/device_add_users_page_list.dart';
-import 'package:remottely/data/firestore/friendships_collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:remottely/utils/my_flutter_app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:remottely/utils/constants.dart';
-import 'package:remottely/views/control/drawer_page.dart';
-import 'package:remottely/widgets/device/devices_page_item.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:remottely/data/firestore/devices_collection.dart';
-import 'package:remottely/widgets/layouts/layout_custom_scroll_view.dart';
-import 'package:remottely/views/device/device_form_page.dart';
-import 'package:flutter/material.dart';
 import 'package:remottely/utils/my_flutter_app_icons.dart';
 import 'package:remottely/utils/constants.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math' as math;
-import 'package:remottely/widgets/design/buttonPop.dart';
 import 'package:flutter/material.dart';
 import 'package:remottely/utils/my_flutter_app_icons.dart';
 import 'package:remottely/utils/constants.dart';
 import 'dart:ui';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:remottely/views/device/devices_page_list.dart';
-import 'package:remottely/views/device/device_add_users_page_list.dart';
-import 'package:remottely/data/firestore/friendships_collection.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:remottely/exceptions/check_internet_connection.dart';
 import 'dart:io';
@@ -117,14 +100,14 @@ class _DeviceFormPageState extends State<DeviceFormPage> {
   Marker userMarker;
   List<Marker> deviceMarkers = [];
   final auth = FirebaseAuth.instance;
-  Position position;
+  // Position position;
   String _imageUrlRecovered;
 
   @override
   void initState() {
     super.initState();
     // CheckInternet().checkConnection(context);
-    if (widget.device == null && !kIsWeb) _getLastKnowUserLocation();
+    // if (widget.device == null && !kIsWeb) _getLastKnowUserLocation();
     _imageUrlRecovered = widget.device == null
         ? ''
         : widget.device.data()['deviceImage']['deviceImageUrl'];
@@ -158,6 +141,8 @@ class _DeviceFormPageState extends State<DeviceFormPage> {
         _deviceFormData['deviceLon'] = widget.device.data()['deviceLon'];
         _deviceFormData['devicetriggerUrl'] =
             widget.device.data()['devicetriggerUrl'];
+             _deviceFormData['deviceImage'] =
+            widget.device.data()['deviceImage'];
         _deviceFormData['deviceUsers'] = widget.device.data()['deviceUsers'];
         _deviceFormData['deviceManagers'] =
             widget.device.data()['deviceManagers'];
@@ -175,11 +160,11 @@ class _DeviceFormPageState extends State<DeviceFormPage> {
     );
   }
 
-  _getLastKnowUserLocation() async {
-    position = await Geolocator()
-        .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
-    if (position == null) _showLocatorDialog();
-  }
+  // _getLastKnowUserLocation() async {
+    // position = await Geolocator()
+        // .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+    // if (position == null) _showLocatorDialog();
+  // }
 
   bool isValidImageUrl(String url) {
     bool startWithHttp = url.toLowerCase().startsWith('http://');
@@ -204,11 +189,11 @@ class _DeviceFormPageState extends State<DeviceFormPage> {
       return;
     }
 
-    await _getLastKnowUserLocation();
+    // await _getLastKnowUserLocation();
 
-    if (position == null && !kIsWeb) {
-      return;
-    }
+    // if (position == null && !kIsWeb) {
+    //   return;
+    // }
 
     _deviceFormKey.currentState.save();
 
@@ -217,13 +202,14 @@ class _DeviceFormPageState extends State<DeviceFormPage> {
       deviceProperty: _deviceFormData['deviceProperty'],
       deviceTitle: _deviceFormData['deviceTitle'],
       deviceAdress: _deviceFormData['deviceAdress'],
-      deviceLat: widget.device == null || !kIsWeb
-          ? position.latitude.toString()
-          : _deviceFormData['deviceLat'],
-      deviceLon: widget.device == null || !kIsWeb
-          ? position.longitude.toString()
-          : _deviceFormData['deviceLon'],
+      deviceLat: '',//_deviceFormData['deviceLat'],
+      deviceLon: '',//_deviceFormData['deviceLon'],
       deviceTriggerUrl: _deviceFormData['deviceTriggerUrl'],
+      deviceImage: {
+        "deviceImageUrl": 'url',
+        "deviceImageHeight": 1,
+        "deviceImageWidth": 1,
+      },
       deviceUsers: _deviceFormData['deviceUsers'],
       deviceManagers: _deviceFormData['deviceManagers'],
       deviceVerified: _deviceFormData['deviceVerified'],
@@ -942,14 +928,14 @@ class _DeviceFormPageState extends State<DeviceFormPage> {
                               children: [
                                 RaisedButton(
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            DeviceAddUsersPageList(
-                                          widget.device.data(),
-                                        ),
-                                      ),
-                                    );
+                                    // Navigator.of(context).push(
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         DeviceAddUsersPageList(
+                                    //       widget.device.data(),
+                                    //     ),
+                                    //   ),
+                                    // );
                                   },
                                   color: AppColors.astratosDarkGreyColor,
                                   child: _uploadingImage

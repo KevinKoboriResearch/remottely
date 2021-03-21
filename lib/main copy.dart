@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'Lato',
             accentColor: AppColors.accentColor,
             indicatorColor: AppColors.indicatorColor,
-            primaryColor: AppColors.astronautCanvasColor,
+            primaryColor: AppColors.astratosDarkGreyColor,
             canvasColor: AppColors.astronautCanvasColor,
             buttonColor: AppColors.astronautCanvasColor,
             highlightColor: Colors.transparent,

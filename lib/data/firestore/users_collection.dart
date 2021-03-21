@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class UsersCollection {
   final auth = FirebaseAuth.instance; //getInstance();//.currentUser()
 
+  
   // bool userExist(uid) {
   //   return firebaseAuth.u//.getUser(uid);
   // }

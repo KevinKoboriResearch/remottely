@@ -36,23 +36,21 @@ class GoogleSignInProvider extends ChangeNotifier {
   }
 
   Future login(BuildContext context) async {
-    // BuildContext context;
-    isSigningIn = true;
-
     final user = await googleSignIn.signIn();
+
     if (user == null) {
-      isSigningIn = false;
       return;
     } else {
       final googleAuth = await user.authentication;
-
+      isSigningIn = true;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      var val = await FirebaseAuth.instance.signInWithCredential(credential);
-      if (val.additionalUserInfo.isNewUser) {
+      var userInstance =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      if (userInstance.additionalUserInfo.isNewUser) {
         Future<ui.Image> _getImage(String urlImage) async {
           Completer<ui.Image> completer = Completer<ui.Image>();
           NetworkImage(urlImage)
@@ -63,37 +61,38 @@ class GoogleSignInProvider extends ChangeNotifier {
           return completer.future;
         }
 
-        var userImageProfile = await _getImage(val.user.photoURL);
+        var userImage = await _getImage(userInstance.user.photoURL);
 
         final Map<String, dynamic> _authData = {
-          'userId': val.user.uid,
-          'userEmail': val.user.email,
-          'userEmailVerified':
-              val.user.emailVerified != null ? val.user.emailVerified : '',
-          'userDisplayName':
-              val.user.displayName != null ? val.user.displayName : '',
-          'userPass': '',
-          'username': '',
-          'userPhoneNumber':
-              val.user.phoneNumber != null ? val.user.phoneNumber : '',
-          'userImageProfile': {
-            'userImageProfileUrl':
-                val.user.photoURL != null ? val.user.photoURL : '',
-            'userImageProfileHeight':
-                userImageProfile.height != null ? userImageProfile.height : '',
-            'userImageProfileWidth':
-                userImageProfile.width != null ? userImageProfile.width : '',
+          'id': userInstance.user.uid,
+          'email': userInstance.user.email,
+          'emailVerified': userInstance.user.emailVerified != null
+              ? userInstance.user.emailVerified
+              : '',
+          'displayName': userInstance.user.displayName != null
+              ? userInstance.user.displayName
+              : '',
+          'pass': '',
+          'phoneNumber': userInstance.user.phoneNumber != null
+              ? userInstance.user.phoneNumber
+              : '',
+          'image': {
+            'imageUrl': userInstance.user.photoURL != null
+                ? userInstance.user.photoURL
+                : '',
+            'imageHeight': userImage.height != null ? userImage.height : '',
+            'imageWidth': userImage.width != null ? userImage.width : '',
           }, //'',
-          'userVerified': false,
+          'verified': false,
+          'companies': [],
         };
 
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(val.user.uid)
+            .doc(userInstance.user.uid)
             .set(_authData);
-        print(
-            '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${userImageProfile.toString()} <<<<<<< ' +
-                '${val.user.uid}\n ${val.additionalUserInfo.isNewUser}');
+        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${userImage.toString()} <<<<<<< ' +
+            '${userInstance.user.uid}\n ${userInstance.additionalUserInfo.isNewUser}');
       }
 
       isSigningIn = false;
