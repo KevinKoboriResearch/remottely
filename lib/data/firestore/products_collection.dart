@@ -18,20 +18,54 @@ class ProductsCollection {
   final auth = FirebaseAuth.instance;
 
   Future<void> productInsert(companyId, product) async {
-    await FirebaseFirestore.instance.collection('companies').doc(companyId).collection('products').add({
+    await FirebaseFirestore.instance
+        .collection('companies')
+        .doc(companyId)
+        .collection('products')
+        .add({
+      "coin": product.coin,
       'companyTitle': product.companyTitle,
-      'title': product.title,
       'description': product.description,
-      'price': product.price,
-      'image': {
-        'imageUrl': '',
-        'imageHeight': 1,
-        'imageWidth': 1,
-      },
+      'images': [
+        {
+          'url': '',
+          'height': 1,
+          'width': 1,
+        }
+      ],
       'interested': [],
-      'promotionPrice': product.promotionPrice,
+      'price': product.price,
+      'promotion': product.promotion,
+      "rating": null,
+      'subtitle': product.subtitle,
+      'title': product.title,
     });
   }
+
+  // Future<void> productInsert(companyId, product) async {
+  //   await FirebaseFirestore.instance
+  //       .collection('companies')
+  //       .doc(companyId)
+  //       .collection('products')
+  //       .add({
+  //     "coin": product.coin,
+  //     'companyTitle': product.companyTitle,
+  //     'description': product.description,
+  //     'images': [
+  //       {
+  //         'imageUrl': '',
+  //         'imageHeight': 1,
+  //         'imageWidth': 1,
+  //       }
+  //     ],
+  //     'interested': [],
+  //     'price': product.price,
+  //     'promotionPrice': product.promotionPrice,
+  //     "rating": null,
+  //     'subtitle': product.subtitle,
+  //     'title': product.title,
+  //   });
+  // }
 
   Future<void> productUpdate(product) async {
     await FirebaseFirestore.instance

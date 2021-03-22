@@ -6,27 +6,31 @@ class ProductModel {
   final String coin;
   final String companyTitle;
   final String description;
-  final ImageModel image;
+  // final bool disabled;
   final List<ImageModel> images;
   final List<String> interested;
-  final String price;
-  final String pricePromotion;
-  final String rating;
+  final double price;
+  final double promotion;
+  // final double quantity;
+  final double rating;
   final String subtitle;
   final String title;
+  // final String type;//product or service
 
   ProductModel({
-    @required this.id,
-    @required this.coin,
-    @required this.companyTitle,
-    @required this.description,
-    @required this.image,
-    @required this.images,
-    @required this.interested,
-    @required this.price,
-    @required this.pricePromotion,
-    @required this.rating,
-    @required this.subtitle,
-    @required this.title,
+     this.id,
+     this.coin,
+     this.companyTitle,
+     this.description,
+    //  this.disabled,
+     this.images,
+     this.interested,
+     this.price,
+     this.promotion,
+    //  this.quantity,
+     this.rating,
+     this.subtitle,
+     this.title,
+    //  this.type,
   });
 }

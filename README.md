@@ -5,6 +5,8 @@ flutter run -d chrome --web-port 8080
 https://www.youtube.com/watch?v=FBoAXUkHu44
 https://medium.com/flutter/learning-flutters-new-navigation-and-routing-system-7c9068155ade
 
+# currency formater real time
+https://smartstack.medium.com/flutter-currency-converter-app-eb99818f1313
 ## Getting Started
 
 This project is a starting point for a Flutter application.

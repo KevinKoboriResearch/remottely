@@ -90,7 +90,7 @@ class _AppShellState extends State<AppShell> {
               label: 'orders',
             ),
             BottomNavigationBarItem(
-              icon: CircleAvatar(
+              icon: auth.currentUser.photoURL != null ? CircleAvatar(
                 maxRadius: 16,
                 backgroundColor: appState.selectedIndex == 4
                     ? Colors.black
@@ -99,7 +99,7 @@ class _AppShellState extends State<AppShell> {
                   maxRadius: 14,
                   backgroundImage: NetworkImage(auth.currentUser.photoURL),
                 ),
-              ),
+              ):Icon(Icons.menu),
               label: 'profile',
             ),
           ],

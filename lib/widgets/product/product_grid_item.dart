@@ -22,7 +22,7 @@ class _ProductGridItemState extends State<ProductGridItem> {
             child: Hero(
               tag: widget.snapshotProduct.id,
               child: CachedNetworkImage(
-                imageUrl: widget.snapshotProduct['image']['url'],
+                imageUrl: widget.snapshotProduct['images'][0]['url'],
                 placeholder: (context, url) => new CircularProgressIndicator(),
                 errorWidget: (context, url, error) =>
                     Center(child: Icon(Icons.error)),
@@ -73,16 +73,16 @@ class _ProductGridItemState extends State<ProductGridItem> {
                                 fontSize: 12,
                                 color: Colors.grey[500],
                                 decoration:
-                                    widget.snapshotProduct['pricePromotion'] !=
+                                    widget.snapshotProduct['promotion'] !=
                                             ''
                                         ? TextDecoration.lineThrough
                                         : TextDecoration.none,
                               ),
                             ),
-                            widget.snapshotProduct['pricePromotion'] != ''
+                            widget.snapshotProduct['promotion'] != ''
                                 ? Text(
                                     ' / R\$ ' +
-                                        widget.snapshotProduct['pricePromotion']
+                                        widget.snapshotProduct['promotion']
                                             .toString(), //acima de tanto, remover os centavos?
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,

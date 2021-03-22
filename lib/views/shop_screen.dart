@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:remottely/providers/products.dart';
-import 'package:remottely/widgets/product/products_grid.dart';
+// import 'package:remottely/widgets/product/products_grid.dart';
 // import 'package:remottely/widgets/badge.dart';
 // import 'package:remottely/widgets/app_drawer.dart';
 // import 'package:remottely/providers/cart.dart';
@@ -24,6 +24,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:remottely/widgets/product/product_grid_item.dart';
+// import 'package:remottely/providers/products.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+// import 'package:shop/providers/auth.dart';
+// import 'package:remottely/providers/product.dart';
+// import 'package:remottely/providers/cart.dart';
+// import 'package:remottely/utils/app_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:remottely/utils/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:remottely/utils/my_flutter_app_icons.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 enum FilterOptions {
   Favorite,
   All,
@@ -70,102 +89,103 @@ class _ShopScreenState extends State<ShopScreen> {
               AsyncSnapshot<QuerySnapshot> snapshotProducts) {
             if (snapshotProducts.data.docs.length == 0) {
               return Stack(
-        fit: StackFit.expand,
-        children: [
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.pressed))
-                    return Colors.blue;
-                  return Colors.white;//Color(0xffDDDDDD); // Use the component's default.
-                },
-              ),
-            ),
-            onPressed: () async {
-              // final provider =
-              //     Provider.of<GoogleSignInProvider>(context, listen: false);
-              // await provider.login(context);
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 64),
-                Text(
-                  'R E M O T T E L Y',
-                  style: TextStyle(
-                    // depth: 1,
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontFamily: 'anurati',
-                  ),
-                ),
-                Spacer(flex: 2),
-                Container(
-                  width: 104,
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                      depth: 3,
-                      color: Colors.white,//Color(0xffDDDDDD),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                           Text(
-                            'Criar ', //'Sign In With ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.grey[600]),
-                          ),
-                          Text(
-                            'L',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.blue),
-                          ),
-                          Text(
-                            'o',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.red),
-                          ),
-                          Text(
-                            'j',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.yellow[800]),
-                          ),
-                          Text(
-                            'a',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.green),
-                          ),
-
-                        ],
+                fit: StackFit.expand,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Colors.blue;
+                          return Colors
+                              .white; //Color(0xffDDDDDD); // Use the component's default.
+                        },
                       ),
                     ),
+                    onPressed: () async {
+                      // final provider =
+                      //     Provider.of<GoogleSignInProvider>(context, listen: false);
+                      // await provider.login(context);
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 64),
+                        Text(
+                          'R E M O T T E L Y',
+                          style: TextStyle(
+                            // depth: 1,
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontFamily: 'anurati',
+                          ),
+                        ),
+                        Spacer(flex: 2),
+                        Container(
+                          width: 104,
+                          child: Neumorphic(
+                            style: NeumorphicStyle(
+                              depth: 3,
+                              color: Colors.white, //Color(0xffDDDDDD),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Criar ', //'Sign In With ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.grey[600]),
+                                  ),
+                                  Text(
+                                    'L',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.blue),
+                                  ),
+                                  Text(
+                                    'o',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.red),
+                                  ),
+                                  Text(
+                                    'j',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.yellow[800]),
+                                  ),
+                                  Text(
+                                    'a',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.green),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Clique na tela',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Clique na tela',
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-                ),
-                Spacer(),
-              ],
-            ),
-          ),
-        ],
-      );
+                ],
+              );
             } else if (!snapshotProducts.hasData) {
               return Center(
                 child: CircularProgressIndicator(),
@@ -250,7 +270,28 @@ class _ShopScreenState extends State<ShopScreen> {
                         ),
                       ),
                     ),
-                    ProductsGrid(snapshotProducts),
+                    // ProductsGrid(snapshotProducts),
+                    SliverPadding(
+                      padding: EdgeInsets.all(8.0),
+                      sliver: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 210,
+                          childAspectRatio: 0.70,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return ProductGridItem(snapshotProducts.data.docs[
+                                index]); //Container(height: 100, color: Colors.red);
+                            // return ChangeNotifierProvider.value(
+                            //   value: products[index],
+                            //   child: ProductGridItem(),
+                            // );
+                          },
+                          childCount: snapshotProducts.data.docs
+                              .length, //products.length, // widget.snapshotProducts.data.docs.length,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

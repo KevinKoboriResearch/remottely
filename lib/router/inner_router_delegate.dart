@@ -10,7 +10,7 @@ import 'package:remottely/router/routes.dart';
 import 'package:remottely/views/shop_screen.dart';
 // import 'package:remottely/views/device/devices_history_page_list.dart';
 // import 'package:remottely/views/device/devices_page_list.dart';
-import 'package:remottely/views/products/device_form_page.dart';
+import 'package:remottely/views/products/product_form_page.dart';
 // import 'package:remottely/views/user/user_perfil_page.dart';
 // import 'package:remottely/views/users_list_screen.dart';
 // import 'package:remottely/views/user_detail_screen.dart';
@@ -75,7 +75,7 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
           ),
         if (appState.selectedIndex == 3)
           FadeAnimationPage(
-            child: DeviceFormPage(null),
+            child: ProductFormPage(null),
             key: ValueKey('ordersPage'),
           ),
         if (appState.selectedIndex == 4)
