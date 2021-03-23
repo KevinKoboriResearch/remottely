@@ -45,9 +45,11 @@ import 'package:remottely/styles/product_styles.dart';
 class ProductsCollection {
   final auth = FirebaseAuth.instance;
 
-  Future<void> productInsert(companyId, product, imagesSelectedList) async {
-     List<Map<String, Object>> allImagesSelectedUrl = [];
-    await FirebaseFirestore.instance
+  List<Map<String, Object>> productInsert(
+      companyId, product, imagesSelectedList) {
+    List<Map<String, Object>> allImagesSelectedUrl = [];
+    // String productId = '';
+    FirebaseFirestore.instance
         .collection('companies')
         .doc(companyId)
         .collection('products')
@@ -63,55 +65,126 @@ class ProductsCollection {
       'subtitle': product.subtitle,
       'title': product.title,
     });
+
+    // .then((product) {
+    //   // productId = product.id.toString();
+    //   print('3\n33\n333\n3333\n33333\n333333\n3333333\n33333333\n');
+    //   // List<Map<String, Object>> allImagesSelectedUrl = [];
+
+    //   if (imagesSelectedList != []) {
+    //     // for (var i; i <= imagesSelectedList.length; i++) {
+    //     getlist() {
+    //       // List<Map<String, Object>> allImagesSelectedUrl = [];
+    //       for (var imageFile in imagesSelectedList) {
+    //         var archive = FirebaseStorage.instance
+    //             .ref()
+    //             .child('company')
+    //             .child('product_images')
+    //             // .child(product.id.toString() + '$i' + '.jpg');
+    //             .child(product.id.toString() + '$imageFile' + '.jpg');
+
+    //         // UploadTask task = archive.putFile(imagesSelectedList[i]);
+    //         UploadTask task = archive.putFile(imageFile);
+
+    //         task.whenComplete(() async {
+    //           var url = await (await task).ref.getDownloadURL();
+    //           // var _decodedProfileImage = await decodeImageFromList(
+    //           await decodeImageFromList(
+    //               // imagesSelectedList[i].readAsBytesSync());
+    //               imageFile.readAsBytesSync()).then((value) {
+    //             allImagesSelectedUrl.add({
+    //               'height': value.height,
+    //               'url': url,
+    //               'width': value.width,
+    //             });
+    //             print('4\n444\n444\n4444\n44444\n444444\n4444444\n44444444\n' +
+    //                 allImagesSelectedUrl.toString());
+    //           });
+    //           // return;
+    //         });
+    //       }
+    //       // return allImagesSelectedUrl;
+    //     }
+
+    //     // var oi = getlist();
+
+    //     // productImagesUpdate(companyId, product, oi);
+    //     // .then((value) {
+    //     // await FirebaseFirestore.instance
+    //     //     .collection('companies')
+    //     //     .doc(companyId)
+    //     //     .collection('products')
+    //     //     .doc(product.id)
+    //     //     .update({
+    //     //   "images":
+    //     //       // [
+    //     //       //   {'oi': 'pqp'}
+    //     //       // ], //
+    //     //       allImagesSelectedUrl,
+    //     // });
+    //     // print('5\n555\n555\n5555\n55555\n555555\n5555555\n55555555\n' +
+    //     //     allImagesSelectedUrl.toString());
+    //     // });
+    //     // if (allImagesSelectedUrl.length == imagesSelectedList.length) {
+    //     // FirebaseFirestore.instance
+    //     //     .collection('companies')
+    //     //     .doc(companyId)
+    //     //     .collection('products')
+    //     //     .doc(product.id)
+    //     //     .update({
+    //     //   "images":
+    //     //       // [
+    //     //       //   {'oi': 'pqp'}
+    //     //       // ], //
+    //     //       allImagesSelectedUrl,
+    //     // });
+    //     // print('5\n555\n555\n5555\n55555\n555555\n5555555\n55555555\n' +
+    //     //     allImagesSelectedUrl.toString());
+    //     // return;
+    //     // }
+    //   }
+    // });
+    // // .whenComplete(() {
+    // //   productImagesUpdate(companyId, 'SbRClrDnmZ40le7LUMvJ', allImagesSelectedUrl);
+    // // });
+    // return allImagesSelectedUrl;//productId;
   }
-  //   .then((product) async {
-  //     print('3\n33\n333\n3333\n33333\n333333\n3333333\n33333333\n');
-     
 
-  //     // if (imagesSelectedList != []) {
-  //       // for (var i; i <= imagesSelectedList.length; i++) {
-  //       for (var imageFile in imagesSelectedList) {
-  //         final archive = await FirebaseStorage.instance
-  //             .ref()
-  //             .child('company')
-  //             .child('product_images')
-  //             // .child(product.id.toString() + '$i' + '.jpg');
-  //             .child(product.id.toString() + '$imageFile' + '.jpg');
+  Future productImagesUpdate(companyId, productId, allImagesSelectedUrl) async {
+    for (int i = 0; i < allImagesSelectedUrl.length; i++) {
+      if (allImagesSelectedUrl[i] is String) continue;
 
-  //         // UploadTask task = archive.putFile(imagesSelectedList[i]);
-  //         UploadTask task = archive.putFile(imageFile);
-  //         task.whenComplete(() async {
-  //           var url = await (await task).ref.getDownloadURL();
-  //           var _decodedProfileImage = await decodeImageFromList(
-  //               // imagesSelectedList[i].readAsBytesSync());
-  //               imageFile.readAsBytesSync());
-  //           await allImagesSelectedUrl.add({
-  //             'height': _decodedProfileImage.height,
-  //             'url': url,
-  //             'width': _decodedProfileImage.width,
-  //           });
-  //           print('4\n444\n444\n4444\n44444\n444444\n4444444\n44444444\n' +
-  //               allImagesSelectedUrl.toString());
-  //           // return;
-  //         });
-  //       }
-  //       // return;
-  //       // }
-  //     // }
-  //   }).whenComplete(() async {
-  //       // if (allImagesSelectedUrl.length == imagesSelectedList.length) {
-  //        await FirebaseFirestore.instance
-  //           .collection('companies')
-  //           .doc(companyId)
-  //           .collection('products')
-  //           .doc(product.id)
-  //           .update({
-  //         "images": allImagesSelectedUrl,//[{'oi': 'pqp'}],//
-  //       });
-  //        print('5\n555\n555\n5555\n55555\n555555\n5555555\n55555555\n' +
-  //               allImagesSelectedUrl.toString());
-      
+      var uploadTask = FirebaseStorage.instance
+          .ref()
+          .child(companyId)
+          .child(productId)
+          .child(DateTime.now().millisecondsSinceEpoch.toString())
+          .putFile(allImagesSelectedUrl[i]);
+// var s = 
+      await uploadTask.whenComplete(() async {
+        var downloadUrl = await (await uploadTask).ref.getDownloadURL();
+        // String downloadUrl = await s.ref.getDownloadURL();
+        allImagesSelectedUrl[i] = downloadUrl;
+      });
+    }
+  }
+
+  // Future<void> productImagesUpdate(
+  //     companyId, productId, allImagesSelectedUrl) async {
+  //   await FirebaseFirestore.instance
+  //       .collection('companies')
+  //       .doc(companyId)
+  //       .collection('products')
+  //       .doc(productId)
+  //       .update({
+  //     "images":
+  //         // [
+  //         //   {'oi': 'pqp'}
+  //         // ], //
+  //         allImagesSelectedUrl,
   //   });
+  //   print('5\n555\n555\n5555\n55555\n555555\n5555555\n55555555\n' +
+  //       allImagesSelectedUrl.toString());
   // }
 
   // Future<void> productInsert(companyId, product) async {
@@ -138,24 +211,6 @@ class ProductsCollection {
   //     'title': product.title,
   //   });
   // }
-//   Future productImagesUpdate(companyId, productId, allImagesSelectedUrl) async {
-//     for (int i = 0; i < allImagesSelectedUrl.length; i++) {
-//       if (allImagesSelectedUrl[i] is String) continue;
-
-//       var uploadTask = FirebaseStorage.instance
-//           .ref()
-//           .child(companyId)
-//           .child(productId)
-//           .child(DateTime.now().millisecondsSinceEpoch.toString())
-//           .putFile(allImagesSelectedUrl[i]);
-// // var s = 
-//       await uploadTask.whenComplete(() async {
-//         var downloadUrl = await (await uploadTask).ref.getDownloadURL();
-//         // String downloadUrl = await s.ref.getDownloadURL();
-//         allImagesSelectedUrl[i] = downloadUrl;
-//       });
-//     }
-//   }
 
   Future<void> productUpdate(product) async {
     await FirebaseFirestore.instance

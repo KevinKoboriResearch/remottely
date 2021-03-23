@@ -206,7 +206,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       elevation: 0,
                       toolbarHeight: 0,
                       expandedHeight: 60,
-                      leading: Container(),
+                      leading: Container(width:0.0, height: 0.0),
                       flexibleSpace: FlexibleSpaceBar(
                         background: Column(
                           children: [

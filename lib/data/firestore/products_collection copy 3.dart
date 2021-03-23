@@ -55,7 +55,7 @@ class ProductsCollection {
       "coin": product.coin,
       'companyTitle': product.companyTitle,
       'description': product.description,
-      'images': [],
+      'images': imagesSelectedList,
       'interested': [],
       'price': product.price,
       'promotion': product.promotion,
