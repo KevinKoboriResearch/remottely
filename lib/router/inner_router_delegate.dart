@@ -17,6 +17,80 @@ import 'package:remottely/views/user_detail_screen.dart';
 
 import 'package:remottely/providers/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+// import 'package:remottely/providers/products.dart';
+// import 'package:remottely/widgets/product/products_grid.dart';
+// import 'package:remottely/widgets/badge.dart';
+// import 'package:remottely/widgets/app_drawer.dart';
+// import 'package:remottely/providers/cart.dart';
+// import 'package:remottely/utils/app_routes.dart';
+import 'package:remottely/utils/my_flutter_app_icons.dart';
+import 'package:flutter/material.dart';
+// import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:math' as math;
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+// import 'package:remottely/views/device/device_detail_page.dart';
+// import 'package:remottely/views/device/devices_manage_page_list.dart';
+// import 'package:remottely/views/device/device_form_page.dart';
+// final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+// import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:remottely/widgets/product/product_grid_item.dart';
+// import 'package:remottely/providers/products.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+// import 'package:shop/providers/auth.dart';
+// import 'package:remottely/providers/product.dart';
+// import 'package:remottely/providers/cart.dart';
+// import 'package:remottely/utils/app_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:remottely/utils/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:remottely/utils/my_flutter_app_icons.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:provider/provider.dart';
+import 'package:remottely/providers/drawer_provider.dart';
+
+import 'package:remottely/views/control/app_drawer.dart';
+
+// import 'package:remottely/screens/login_screen.dart';
+import 'package:remottely/tiles/drawer_tile.dart';
+import 'package:remottely/views/control/app_shell.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:remottely/utils/my_flutter_app_icons.dart';
+import 'package:remottely/router/remottely_app_state.dart';
+import 'package:remottely/utils/remottely_icons.dart';
+import 'package:remottely/router/inner_router_delegate.dart';
+
+import 'package:flutter/foundation.dart';
+import 'package:remottely/utils/my_flutter_app_icons.dart';
+import 'package:remottely/router/remottely_app_state.dart';
+import 'package:remottely/router/inner_router_delegate.dart';
+
+import 'package:remottely/providers/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:remottely/utils/constants.dart';
+import 'package:remottely/providers/drawer_provider.dart';
+import 'package:remottely/tiles/drawer_tile.dart';
+import 'dart:math' as math;
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:provider/provider.dart';
+import 'package:remottely/providers/drawer_provider.dart';
 class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<UserRoutePath> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -42,7 +116,7 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
           //   child: Container(),
           //   key: ValueKey('HomePage'),
           // )
-        ...[
+          ...[
           FadeAnimationPage(
             child: UsersListScreen(
               users: appState.users,
@@ -55,27 +129,36 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
               key: ValueKey(appState.selectedUser),
               child: UserDetailsScreen(user: appState.selectedUser),
             ),
-        ]
-        else if (appState.selectedIndex == 1)
+        ] else if (appState.selectedIndex == 1)
           FadeAnimationPage(
             child: ShopScreen(),
             key: ValueKey('SearchPage'),
           ),
         if (appState.selectedIndex == 2)
           FadeAnimationPage(
-            child: Container(child: ElevatedButton(
+            child: Scaffold(
+              appBar: AppBar(
+                leading: ElevatedButton(
+                  onPressed: () {
+                    toggleDrawer();
+                  },
+                  child: Text('menu'),
+                ),
+              ),
+              body: ElevatedButton(
                 onPressed: () {
                   final provider =
                       Provider.of<GoogleSignInProvider>(context, listen: false);
                   provider.logout();
                 },
                 child: Text('Logout'),
-              ),),
+              ),
+            ),
             key: ValueKey('shopPage'),
           ),
         if (appState.selectedIndex == 3)
           FadeAnimationPage(
-            child: ProductFormPage(null),
+            child: ProductFormPage('tapanapanterahs','tabacos', null),
             key: ValueKey('ordersPage'),
           ),
         if (appState.selectedIndex == 4)

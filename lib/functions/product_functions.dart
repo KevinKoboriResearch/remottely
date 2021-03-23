@@ -30,8 +30,12 @@ import 'package:remottely/validators/product_validators.dart';
 
 class ProductFunctions {
   String doubleValueToCurrency(double doubleValue) {
-    return NumberFormat.currency(
-            customPattern: 'R\$ ###,###.##', locale: 'nl_NL')
-        .format(doubleValue);
+    if (doubleValue > 999.99) {
+      return NumberFormat.compact().format(doubleValue);
+    } else {
+      return NumberFormat.currency(
+              customPattern: '###,###.##', locale: 'nl_NL')
+          .format(doubleValue);
+    }
   }
 }

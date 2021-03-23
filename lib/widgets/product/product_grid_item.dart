@@ -37,13 +37,14 @@ class ProductGridItem extends StatefulWidget {
 }
 
 class _ProductGridItemState extends State<ProductGridItem> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  bool value = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(6.0),
+      padding: EdgeInsets.fromLTRB(6.0, 0.0, 6.0, 6.0),
       child: Column(
         children: [
-          Spacer(),
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: Hero(
@@ -56,7 +57,6 @@ class _ProductGridItemState extends State<ProductGridItem> {
               ),
             ),
           ),
-          Spacer(),
           SizedBox(
             height: 4,
           ),
@@ -91,28 +91,42 @@ class _ProductGridItemState extends State<ProductGridItem> {
                         Row(
                           children: [
                             widget.snapshotProduct['price'] != 0.00
-                                ? Text(
-                                    ProductFunctions().doubleValueToCurrency(widget
-                                            .snapshotProduct[
-                                        'price']), //acima de tanto, remover os centavos?
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[500],
-                                      decoration:
-                                          widget.snapshotProduct['promotion'] !=
-                                                  0.00
-                                              ? TextDecoration.lineThrough
-                                              : TextDecoration.none,
-                                    ),
-                                  )
-                                : Container(width:0.0, height: 0.0),
+                                ? widget.snapshotProduct['promotion'] != 0.00
+                                    ? Text(
+                                        ProductFunctions()
+                                            .doubleValueToCurrency(widget
+                                                    .snapshotProduct[
+                                                'price']), //acima de tanto, remover os centavos?
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey[500],
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                      )
+                                    : Text(
+                                        'R\$ ' +
+                                            ProductFunctions()
+                                                .doubleValueToCurrency(widget
+                                                        .snapshotProduct[
+                                                    'price']), //acima de tanto, remover os centavos?
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey[500],
+                                        ),
+                                      )
+                                : Container(width: 0.0, height: 0.0),
                             widget.snapshotProduct['promotion'] != 0.00
                                 ? Text(
-                                    ProductFunctions().doubleValueToCurrency(widget
-                                            .snapshotProduct[
-                                        'promotion']), //'/${currencyPromotion}', //acima de tanto, remover os centavos?
+                                    ' / R\$ ' +
+                                        ProductFunctions()
+                                            .doubleValueToCurrency(widget
+                                                    .snapshotProduct[
+                                                'promotion']), //'/${currencyPromotion}', //acima de tanto, remover os centavos?
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -120,7 +134,7 @@ class _ProductGridItemState extends State<ProductGridItem> {
                                       color: Colors.red[800],
                                     ),
                                   )
-                                : Container(width:0.0, height: 0.0),
+                                : Container(width: 0.0, height: 0.0),
                           ],
                         ),
                       ],
@@ -130,13 +144,56 @@ class _ProductGridItemState extends State<ProductGridItem> {
               ),
               Positioned(
                 right: 0,
-                child: Icon(
-                  Icons.bookmark_border,
-                  size: 26,
+                child: InkWell(
+                  onTap: () async {
+                    value = !value;
+                    try {
+                      if (value) {
+                        await FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(_auth.currentUser.uid)
+                            .collection("favorites")
+                            .doc(widget.snapshotProduct.id)
+                            .update({
+                          "docRef":
+                              "companies/bwBiNTo7yOIUYehamSmD/products/7oGf33sgfZvPHh4kgvah",
+                        });
+                        setState(() {
+                          value;
+                        });
+                      } else {
+                        await FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(_auth.currentUser.uid)
+                            .collection("favorites")
+                            .doc(widget.snapshotProduct.id)
+                            .delete();
+                        setState(() {
+                          value;
+                        });
+                      }
+                    } catch (error) {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (_) => Container(
+                          height: 140,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [Text('error: ' + error)],
+                          ),
+                        ),
+                      );
+                    } finally {}
+                  },
+                  child: Icon(
+                    value ? Icons.bookmark : Icons.bookmark_border,
+                    size: 26,
+                  ),
                 ),
               ),
             ],
           ),
+          Spacer(),
         ],
       ),
     );

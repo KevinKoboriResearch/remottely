@@ -45,130 +45,83 @@ import 'package:remottely/styles/product_styles.dart';
 class ProductsCollection {
   final auth = FirebaseAuth.instance;
 
-  Future<void> productInsert(companyId, product, imagesSelectedList) async {
-     List<Map<String, Object>> allImagesSelectedUrl = [];
+  Future<void> productInsert(product, imagesSelectedList) async {
     await FirebaseFirestore.instance
-        .collection('companies')
-        .doc(companyId)
+        .collection('remottelyCompanies')
+        .doc(product.companyTitle) //.doc('tapanapanterahs') //
+        .collection('productCategories')
+        .doc(product.categoryTitle) //.doc('Tabacos') //
         .collection('products')
-        .add({
-      "coin": product.coin,
+        .doc(product.title)
+        .set({
+      'categoryTitle': product.categoryTitle,
+      'coin': product.coin,
       'companyTitle': product.companyTitle,
-      'description': product.description,
-      'images': [],
-      'interested': [],
+      'enabled': product.enabled,
+      'images': product.images,
+      'interested': product.enabled,
       'price': product.price,
       'promotion': product.promotion,
-      "rating": 0.0,
+      'rating': product.rating,
+      'sizes': product.sizes,
+      'subtitle': product.subtitle,
+      'title': product.title,
+    });
+    await FirebaseFirestore.instance.collection('remottelyProducts').add({
+      'categoryTitle': product.categoryTitle,
+      'coin': product.coin,
+      'companyTitle': product.companyTitle,
+      'enabled': product.enabled,
+      'images': product.images,
+      'interested': product.enabled,
+      'price': product.price,
+      'promotion': product.promotion,
+      'rating': product.rating,
+      'sizes': product.sizes,
       'subtitle': product.subtitle,
       'title': product.title,
     });
   }
-  //   .then((product) async {
-  //     print('3\n33\n333\n3333\n33333\n333333\n3333333\n33333333\n');
-     
 
-  //     // if (imagesSelectedList != []) {
-  //       // for (var i; i <= imagesSelectedList.length; i++) {
-  //       for (var imageFile in imagesSelectedList) {
-  //         final archive = await FirebaseStorage.instance
-  //             .ref()
-  //             .child('company')
-  //             .child('product_images')
-  //             // .child(product.id.toString() + '$i' + '.jpg');
-  //             .child(product.id.toString() + '$imageFile' + '.jpg');
-
-  //         // UploadTask task = archive.putFile(imagesSelectedList[i]);
-  //         UploadTask task = archive.putFile(imageFile);
-  //         task.whenComplete(() async {
-  //           var url = await (await task).ref.getDownloadURL();
-  //           var _decodedProfileImage = await decodeImageFromList(
-  //               // imagesSelectedList[i].readAsBytesSync());
-  //               imageFile.readAsBytesSync());
-  //           await allImagesSelectedUrl.add({
-  //             'height': _decodedProfileImage.height,
-  //             'url': url,
-  //             'width': _decodedProfileImage.width,
-  //           });
-  //           print('4\n444\n444\n4444\n44444\n444444\n4444444\n44444444\n' +
-  //               allImagesSelectedUrl.toString());
-  //           // return;
-  //         });
-  //       }
-  //       // return;
-  //       // }
-  //     // }
-  //   }).whenComplete(() async {
-  //       // if (allImagesSelectedUrl.length == imagesSelectedList.length) {
-  //        await FirebaseFirestore.instance
-  //           .collection('companies')
-  //           .doc(companyId)
-  //           .collection('products')
-  //           .doc(product.id)
-  //           .update({
-  //         "images": allImagesSelectedUrl,//[{'oi': 'pqp'}],//
-  //       });
-  //        print('5\n555\n555\n5555\n55555\n555555\n5555555\n55555555\n' +
-  //               allImagesSelectedUrl.toString());
-      
-  //   });
-  // }
-
-  // Future<void> productInsert(companyId, product) async {
+  // Future<void> productUpdate(companyId, product) async {
   //   await FirebaseFirestore.instance
   //       .collection('companies')
   //       .doc(companyId)
   //       .collection('products')
-  //       .add({
+  //       .doc('${product.id}')
+  //       .update({
   //     "coin": product.coin,
   //     'companyTitle': product.companyTitle,
+  //     'companyRef': product.companyRef,
   //     'description': product.description,
-  //     'images': [
-  //       {
-  //         'imageUrl': '',
-  //         'imageHeight': 1,
-  //         'imageWidth': 1,
-  //       }
-  //     ],
-  //     'interested': [],
+  //     'enabled': product.enabled,
+  //     'images': product.images,
+  //     'interested': product.enabled,
   //     'price': product.price,
-  //     'promotionPrice': product.promotionPrice,
-  //     "rating": null,
+  //     'promotion': product.promotion,
+  //     "rating": product.rating,
+  //     'sizes': product.sizes,
   //     'subtitle': product.subtitle,
   //     'title': product.title,
+  //     'type': product.type,
   //   });
   // }
-//   Future productImagesUpdate(companyId, productId, allImagesSelectedUrl) async {
-//     for (int i = 0; i < allImagesSelectedUrl.length; i++) {
-//       if (allImagesSelectedUrl[i] is String) continue;
 
-//       var uploadTask = FirebaseStorage.instance
-//           .ref()
-//           .child(companyId)
-//           .child(productId)
-//           .child(DateTime.now().millisecondsSinceEpoch.toString())
-//           .putFile(allImagesSelectedUrl[i]);
-// // var s = 
-//       await uploadTask.whenComplete(() async {
-//         var downloadUrl = await (await uploadTask).ref.getDownloadURL();
-//         // String downloadUrl = await s.ref.getDownloadURL();
-//         allImagesSelectedUrl[i] = downloadUrl;
-//       });
-//     }
-//   }
-
-  Future<void> productUpdate(product) async {
-    await FirebaseFirestore.instance
-        .collection("products")
-        .doc('${product.id}')
-        .update({
-      'title': product.title,
-      'desc': product.desc,
-      'location': product.location,
-      'interested': product,
-      'verified': product,
-    });
-  }
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
   FutureOr<List<String>> userFriendshipsNotAcceptedGet() async {
     List<String> friends = [];

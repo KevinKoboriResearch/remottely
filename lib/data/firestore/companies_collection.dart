@@ -13,27 +13,40 @@ import 'package:remottely/utils/constants.dart';
 import 'package:remottely/functions/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:remottely/data/firestore/devices_collection.dart';
-
+//  await Firestore.instance.cllection("catogies").document(title.toLowerCase())
+//           .setData(dataToUpdaote);
 class CompaniesCollection {
   final auth = FirebaseAuth.instance;
 
-  Future<void> productInsert(device) async {
-//GeoPoint(device.latitude, device.longitude),
+  Future<void> companyInsert(company) async {
+// //GeoPoint(device.latitude, device.longitude),
+// try {
+
+
+// var exist = await FirebaseFirestore.instance.collection("catgories").doc(company.title.toLowerCase()).get();
+// if(exist) {
+// return;//ja existe esse nome
+// } else {
+
+//   await FirebaseFirestore.instance.collection("catogies").doc(company.title.toLowerCase()).set(company);
+// return;//success
+// }
+//   }       
     await FirebaseFirestore.instance.collection('companies').doc().collection('devices').add({
-      'title': device.title,
-      'description': device.description,
-      'price': device.price,
+      'title': company.title,
+      'description': company.description,
+      'price': company.price,
       'image': {
         'imageUrl': '',
         'imageHeight': 1,
         'imageWidth': 1,
       },
       'interested': [],
-      'promotionPrice': device.promotionPrice,
+      'promotionPrice': company.promotionPrice,
     });
   }
 
-  Future<void> deviceUpdate(device) async {
+  Future<void> companyUpdate(device) async {
     await FirebaseFirestore.instance
         .collection("devices")
         .doc('${device.id}')

@@ -28,6 +28,11 @@ import 'package:remottely/validators/product_validators.dart';
 class ProductStyles {
   InputDecoration inputTextDecoration(String labelText, String hintText) {
     return InputDecoration(
+      // border: InputBorder.none,
+      // focusedBorder: InputBorder.none,
+      // enabledBorder: InputBorder.none,
+      // errorBorder: InputBorder.none,
+      // disabledBorder: InputBorder.none,
       suffixIcon: Icon(Icons.search, color: AppColors.astratosDarkGreyColor),
       labelText: labelText,
       labelStyle: TextStyle(
@@ -38,7 +43,7 @@ class ProductStyles {
       hintStyle: TextStyle(
         color: Colors.grey,
       ),
-      border: InputBorder.none,
+      // border: InputBorder.none,
     );
   }
 

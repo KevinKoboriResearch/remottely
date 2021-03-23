@@ -27,7 +27,7 @@ class ProductValidators {
       double val = double.tryParse(value);
       if (val != null) {
         if (!value.contains(".") || value.split(".")[1].length != 2)
-          return "Utilize 2 casas decimais";
+          return 'Utilize 2 casas decimais utilizando "." e nao ","';
       } else {
         return "Preço inválido";
       }

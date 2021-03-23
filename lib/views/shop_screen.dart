@@ -42,6 +42,36 @@ import 'package:remottely/utils/my_flutter_app_icons.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:remottely/providers/drawer_provider.dart';
+
+import 'package:remottely/views/control/app_drawer.dart';
+
+// import 'package:remottely/screens/login_screen.dart';
+import 'package:remottely/tiles/drawer_tile.dart';
+import 'package:remottely/views/control/app_shell.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:remottely/utils/my_flutter_app_icons.dart';
+import 'package:remottely/router/remottely_app_state.dart';
+import 'package:remottely/utils/remottely_icons.dart';
+import 'package:remottely/router/inner_router_delegate.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:remottely/utils/my_flutter_app_icons.dart';
+import 'package:remottely/router/remottely_app_state.dart';
+import 'package:remottely/router/inner_router_delegate.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:remottely/providers/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:remottely/utils/constants.dart';
+import 'package:remottely/providers/drawer_provider.dart';
+import 'package:remottely/tiles/drawer_tile.dart';
+import 'dart:math' as math;
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:provider/provider.dart';
+import 'package:remottely/providers/drawer_provider.dart';
 
 enum FilterOptions {
   Favorite,
@@ -53,7 +83,8 @@ class ShopScreen extends StatefulWidget {
   _ShopScreenState createState() => _ShopScreenState();
 }
 
-class _ShopScreenState extends State<ShopScreen> {
+class _ShopScreenState extends State<ShopScreen>
+    with SingleTickerProviderStateMixin {
   bool _showFavoriteOnly = false;
   bool _isLoading = true;
   final auth = FirebaseAuth.instance;
@@ -67,20 +98,25 @@ class _ShopScreenState extends State<ShopScreen> {
     // });
   }
 
+  // toggleDrawer() async {
+  //   if (appShellScaffoldKey.currentState.isDrawerOpen) {
+  //     appShellScaffoldKey.currentState.openEndDrawer();
+  //   } else {
+  //     appShellScaffoldKey.currentState.openDrawer();
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
+    final DrawerProvider drawerProvider = Provider.of(context);
+    // drawerProvider.pageIndex;
     return Scaffold(
       // backgroundColor: Colors.grey[100],
-      extendBody: false,
+      // drawer: CustomDrawer(),
+      extendBody: true,
       body: Builder(
         builder: (context) => StreamBuilder(
           stream: FirebaseFirestore.instance
-              //  .collection('companies')
-              // //  .doc('RPJkEiX3yxV2ZWH19LNHDZyCdZ33')
-              //   .where(
-              //     "companyManagers",
-              //     arrayContains: auth.currentUser.uid,
-              //   )
               .collection('companies')
               .doc('bwBiNTo7yOIUYehamSmD')
               .collection('products')
@@ -183,6 +219,14 @@ class _ShopScreenState extends State<ShopScreen> {
                 width: 1000,
                 child: CustomScrollView(
                   slivers: [
+                    // SliverAppBar(
+                    //   backgroundColor: Colors.transparent,
+                    //   toolbarHeight: 0,
+                    //   elevation: 0,
+                    //   leading: Container(),
+                    //   title: Container(),
+                    //   actions: [],
+                    // ),
                     SliverAppBar(
                       floating: true,
                       snap: true,
@@ -192,7 +236,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       expandedHeight: 40,
                       flexibleSpace: FlexibleSpaceBar(
                         centerTitle: false,
-                        titlePadding: EdgeInsets.fromLTRB(14.0, 0.0, 14.0, 0.0),
+                        titlePadding: EdgeInsets.fromLTRB(14.0, 0.0, 12.0, 0.0),
                         title: Row(
                           children: [
                             Text(
@@ -205,76 +249,31 @@ class _ShopScreenState extends State<ShopScreen> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.grey[800])),
                             Spacer(),
-                            Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.rotationY(math.pi),
-                              child: NeumorphicIcon(
-                                MyFlutterApp.sort,
-                                size: 32,
-                                style: NeumorphicStyle(
-                                  depth: 1,
-                                  color: AppColors.textColor,
+                            InkWell(
+                              onTap: () {
+                                toggleDrawer();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    0.0, 6.0, 0.0, 0.0),
+                                child: Transform(
+                                  alignment: Alignment.center,
+                                  transform: Matrix4.rotationY(math.pi),
+                                  child: NeumorphicIcon(
+                                    MyFlutterApp.sort,
+                                    size: 32,
+                                    style: NeumorphicStyle(
+                                      depth: 1,
+                                      color: AppColors.textColor,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-
-                        // Text(
-                        //     snapshotProducts.hasData
-                        //         ? snapshotProducts.data.docs[0]['companyTitle']
-                        //         : '',
-                        //     style: TextStyle(
-                        //         fontSize: 28,
-                        //         fontWeight: FontWeight.bold,
-                        //         color: Colors.grey[800])),
-                        //   background: Column(
-                        //     children: [
-                        //       Spacer(flex: 3),
-                        //       Row(
-                        //         children: [
-                        //           Spacer(),
-                        //           Icon(Icons.menu),
-                        //         ],
-                        //       ),
-                        //       Spacer(),
-                        //     ],
-                        //   ),
                       ),
                     ),
-                    // SliverAppBar(
-                    //   pinned: true,
-                    //   // snap: true,
-                    //   backgroundColor: Colors.white,
-                    //   elevation: 0,
-                    //   toolbarHeight: 0,
-                    //   expandedHeight: 60,
-                    //   leading: Container(width: 0.0, height: 0.0),
-                    //   flexibleSpace: FlexibleSpaceBar(
-                    //     background: Column(
-                    //       children: [
-                    //         Spacer(flex: 3),
-                    //         Row(
-                    //           children: [
-                    //             Padding(
-                    //               padding: const EdgeInsets.only(left: 16.0),
-                    //               child: Text(
-                    //                   snapshotProducts.hasData
-                    //                       ? snapshotProducts.data.docs[0]
-                    //                           ['companyTitle']
-                    //                       : '', //'tapanapanterahs',
-                    //                   style: TextStyle(
-                    //                       fontSize: 28,
-                    //                       fontWeight: FontWeight.bold,
-                    //                       color: Colors.grey[800])),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //         Spacer(),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                     SliverAppBar(
                       pinned: true,
                       backgroundColor: Colors.white,
@@ -315,7 +314,12 @@ class _ShopScreenState extends State<ShopScreen> {
                     ),
                     // ProductsGrid(snapshotProducts),
                     SliverPadding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.fromLTRB(
+                        8.0,
+                        0.0,
+                        8.0,
+                        8.0,
+                      ),
                       sliver: SliverGrid(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 210,
@@ -330,9 +334,8 @@ class _ShopScreenState extends State<ShopScreen> {
                             //   child: ProductGridItem(),
                             // );
                           },
-                          childCount: 50,
-                          // snapshotProducts.data.docs
-                          //     .length, //products.length, // widget.snapshotProducts.data.docs.length,
+                          childCount: snapshotProducts.data.docs
+                              .length, //products.length, // widget.snapshotProducts.data.docs.length,
                         ),
                       ),
                     ),

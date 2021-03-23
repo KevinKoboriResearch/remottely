@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:remottely/models/image_model.dart';
 import 'package:remottely/models/product_model.dart';
-import 'package:remottely/data/firestore/products_collection.dart';
 import 'package:remottely/utils/my_flutter_app_icons.dart';
 import 'package:remottely/utils/constants.dart';
-import 'package:remottely/utils/via_cep_service.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:remottely/exceptions/http_exception.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,38 +14,34 @@ import 'dart:ui';
 import 'dart:io';
 import 'package:remottely/utils/my_flutter_app_icons_2.dart';
 
-import 'package:remottely/functions/flushbar.dart';
 import 'package:flutter/services.dart';
-import 'package:remottely/functions/streams.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:remottely/validators/product_validators.dart';
 
 import 'package:remottely/styles/product_styles.dart';
-// import 'package:flutter_masked_text2/flutter_masked_text2.dart';
-// import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
-//detect if user exist in firebase
-//send request to become a manager
-//show options for managers of device
-//show option for invite device users?
-//show users
+import 'package:remottely/widgets/product_sizes.dart';
+import 'package:remottely/functions/flushbar.dart';
 
 class ProductFormPage extends StatefulWidget {
-  final device;
-  ProductFormPage(this.device);
+  final reqCompanyTitle;
+  final reqCategoryTitle;
+  final reqProduct;
+  ProductFormPage(this.reqCompanyTitle, this.reqCategoryTitle, this.reqProduct);
 
   @override
   _ProductFormPageState createState() => _ProductFormPageState();
 }
 
 class _ProductFormPageState extends State<ProductFormPage> {
-  // var controller = new MaskedTextController(mask: '000.000.000-00');
-  String zzz = "";
   final _descriptionFocusNode = FocusNode();
   final _coinFocusNode = FocusNode();
   final _priceFocusNode = FocusNode();
   final _promotionFocusNode = FocusNode();
+  // final _sizesFocusNode = FocusNode();
+
   final _subtitleFocusNode = FocusNode();
   final _titleFocusNode = FocusNode();
+  // final _typeFocusNode = FocusNode();
 
   final _formKey = GlobalKey<FormState>();
   final _formData = Map<String, Object>();
@@ -58,18 +49,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
   double zz = 23542234;
   bool _isLoading = false;
   bool _enableField = true;
-  // String _adressResult;
   Marker deviceMaker;
   Marker userMarker;
   List<Marker> deviceMarkers = [];
   final auth = FirebaseAuth.instance;
-  // String _imageUrlRecovered;
 
   final ImagePicker _picker = ImagePicker();
   dynamic _decodedProfileImage;
   bool _uploadingImage = false;
   String sourceImagem;
-  dynamic allImagesSelectedFile = []; //List<File>
+  // List allImagesSelectedFile = [];
+  List<dynamic> allImagesSelectedFile = [];
   // List<Map<String, Object>> allImagesSelectedFile = [];
 
   @override
@@ -84,115 +74,105 @@ class _ProductFormPageState extends State<ProductFormPage> {
     _descriptionFocusNode.dispose();
     _priceFocusNode.dispose();
     _promotionFocusNode.dispose();
+    // _sizesFocusNode.dispose();
     _subtitleFocusNode.dispose();
     _titleFocusNode.dispose();
+    // _typeFocusNode.dispose();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_formData.isEmpty) {
-      if (widget.device != null) {
-        _formData['id'] = widget.device.id;
-        _formData['coin'] = widget.device.data()['coin'];
-        _formData['companyTitle'] = widget.device.data()['companyTitle'];
-        _formData['description'] = widget.device.data()['description'];
-        _formData['images'] = widget.device.data()['images'];
-        _formData['interested'] = widget.device.data()['interested'];
-        _formData['price'] = widget.device.data()['price'];
-        _formData['promotion'] = widget.device.data()['promotion'];
-        _formData['rating'] = widget.device.data()['rating'];
-        _formData['subtitle'] = widget.device.data()['subtitle'];
-        _formData['title'] = widget.device.data()['title'];
+      if (widget.reqProduct != null) {
+        _formData['id'] = widget.reqProduct.id;
+        _formData['coin'] = widget.reqProduct.data()['coin'];
+        _formData['companyTitle'] = widget.reqProduct.data()['companyTitle'];
+        _formData['categoryTitle'] = widget.reqProduct.data()['categoryTitle'];
+        _formData['description'] = widget.reqProduct.data()['description'];
+        _formData['enabled'] = widget.reqProduct.data()['enabled'];
+        _formData['images'] = widget.reqProduct.data()['images'];
+        _formData['interested'] = widget.reqProduct.data()['interested'];
+        _formData['price'] = widget.reqProduct.data()['price'];
+        _formData['promotion'] = widget.reqProduct.data()['promotion'];
+        _formData['rating'] = widget.reqProduct.data()['rating'];
+        _formData['sizes'] = widget.reqProduct.data()['sizes'];
+        _formData['subtitle'] = widget.reqProduct.data()['subtitle'];
+        _formData['title'] = widget.reqProduct.data()['title'];
+        // _formData['type'] = widget.reqProduct.data()['type'];
       } else {
+        _formData['id'] = "";
         _formData['coin'] = 'R\$';
-        _formData['companyTitle'] = 'kevinkobori';
+        _formData['companyTitle'] = widget.reqCompanyTitle;
+        _formData['categoryTitle'] = widget.reqCategoryTitle;
+        _formData['description'] = "";
+        _formData['enabled'] = true;
+        _formData['images'] = [];
+        _formData['interested'] = [];
+        _formData['price'] = "0.00";
+        _formData['promotion'] = "0.00";
+        _formData['rating'] = [];
+        _formData['sizes'] = [];
+        _formData['subtitle'] = "";
+        _formData['title'] = "";
+        // _formData['type'] = "Produto";
       }
     }
   }
 
   Future<void> _saveForm() async {
-    var imagesSelectedList = allImagesSelectedFile;
-
     var isValid = _formKey.currentState.validate();
 
     if (!isValid) {
       return;
     }
 
-    _formKey.currentState.save();
+    if (allImagesSelectedFile.length == 0) {
+      showFlushbar(context, 'msgTitle', 'msg');
+      return;
+    }
 
-    // var productForm
-    //  = ProductModel(
-    //   id: _formData['id'],
-    //   companyTitle: _formData['companyTitle'],
-    //   coin: _formData['coin'],
-    //   description: _formData['description'],
-    //   images: [],//allImagesSelectedFile,
-    //   interested: [],//_formData['interested'],
-    //   price: _formData['price'],
-    //   promotion: _formData['promotion'],
-    //   rating:1,// _formData['rating'],
-    //   subtitle: _formData['subtitle'],
-    //   title: _formData['title'],
-    // );
+    _formKey.currentState.save();
 
     var productForm = ProductModel(
       id: _formData['id'],
       companyTitle: _formData['companyTitle'],
+      categoryTitle: _formData['categoryTitle'],
       coin: _formData['coin'],
       description: _formData['description'],
-      images: [], //allImagesSelectedFile,
+      enabled: _formData['enabled'],
+      images: [],
       interested: _formData['interested'],
       price: double.parse(_formData['price']),
       promotion: double.parse(_formData['promotion']),
-      // rating: 1.0,
+      rating: _formData['rating'],
+      sizes: _formData['sizes'],
       subtitle: _formData['subtitle'],
       title: _formData['title'],
+      // type: _formData['type'],
     );
 
-    // print(productForm.images.toString());
-    // print(productForm.interested.toString());
-    // print(productForm.price.toString());
-    // print(productForm.promotion.toString());print(productForm.images.toString());
-    // print(productForm.images.toString());
-    // print(productForm.images.toString());
-    // print(productForm.images.toString());
-    // print(productForm.images.toString());
-    // print(productForm.images.toString());
-    List<Map<String, Object>> testelistaa;
     setState(() {
       _deviceIsLoading = true;
     });
-    var companyId = 'bwBiNTo7yOIUYehamSmD';
+    // var widget.reqCompanyTitle = 'bwBiNTo7yOIUYehamSmD';
 
     Future productImagesUpdate(
-        companyId, productId, allImagesSelectedFile) async {
+        companyTitle, categoryTitle, productTitle, allImagesSelectedFile) async {
       for (int i = 0; i < allImagesSelectedFile.length; i++) {
-        print('5\n555\n555\n5555\n55555\n555555\n5555555\n55555555\n' +
-            allImagesSelectedFile.toString());
         if (allImagesSelectedFile[i] is String) continue;
 
         var uploadTask = FirebaseStorage.instance
             .ref()
-            .child(companyId)
-            .child(productId)
+            .child(companyTitle)
+            .child(categoryTitle)
+            .child(productTitle)
             .child(DateTime.now().millisecondsSinceEpoch.toString())
             .putFile(allImagesSelectedFile[i]);
-// var s =
         await uploadTask.whenComplete(() async {
           var downloadUrl = await (await uploadTask).ref.getDownloadURL();
-          // String downloadUrl = await s.ref.getDownloadURL();
-          //  var url = await (await task).ref.getDownloadURL();
-          // var _decodedProfileImage = await decodeImageFromList(
           var val = await decodeImageFromList(
-              // imagesSelectedList[i].readAsBytesSync());
-              allImagesSelectedFile[i].readAsBytesSync()); //.then((value) {
-          // allImagesSelectedFile.add({
-          //   'height': val.height,
-          //   'url': downloadUrl,
-          //   'width': val.width,
-          // });
+              allImagesSelectedFile[i].readAsBytesSync());
           allImagesSelectedFile[i] = {
             'height': val.height,
             'url': downloadUrl,
@@ -203,84 +183,87 @@ class _ProductFormPageState extends State<ProductFormPage> {
     }
 
     try {
-      if (_formData['id'] != null) {
-        // await productImagesUpdate(companyId, _formData['id'],
-        //     allImagesSelectedFile); //productImagesUpdate(product.documentID);
-        // print('6\n666\n666\n6666\n66666\n666666\n6666666\n66666666\n' +
-        //     allImagesSelectedFile.toString());
-        // await ProductsCollection()
-        //     .productInsert(companyId, productForm, allImagesSelectedFile);
-        // // await product.reference.updateData(unsavedData);
+      if (_formData['id'] != "") {
+        //   // await productImagesUpdate(widget.reqCompanyTitle, _formData['id'],
+        //   //     allImagesSelectedFile); //productImagesUpdate(product.documentID);
+        //   // print('6\n666\n666\n6666\n66666\n666666\n6666666\n66666666\n' +
+        //   //     allImagesSelectedFile.toString());
+        //   // await ProductsCollection()
+        //   //     .productInsert(widget.reqCompanyTitle, productForm, allImagesSelectedFile);
+        //   // // await product.reference.updateData(unsavedData);
       } else {
-        // DocumentReference dr = await Firestore.instance
-        //     .collection("products")
-        //     .document(categoryId)
-        //     .collection("items")
-        //     .add(Map.from(unsavedData)..remove("images"));
-        DocumentReference dr = await FirebaseFirestore.instance
-            .collection('companies')
-            .doc(companyId)
+        // DocumentReference dr =
+        await productImagesUpdate(
+          productForm.companyTitle,
+            productForm.categoryTitle, productForm.title, 
+            allImagesSelectedFile);
+        await FirebaseFirestore.instance
+            // .collection('companies')
+            // .doc(widget.reqCompanyTitle)
+            // .collection('products')
+            // .add({
+            .collection('remottelyCompanies')
+            .doc(productForm.companyTitle) //.doc('tapanapanterahs') //
+            .collection('productCategories')
+            .doc(productForm.categoryTitle) //.doc('Tabacos') //
             .collection('products')
-            .add({
-          "coin": productForm.coin,
+            .doc(productForm.title)
+            .set({
+          'categoryTitle': productForm.categoryTitle,
           'companyTitle': productForm.companyTitle,
+          'coin': productForm.coin,
           'description': productForm.description,
-          'images': [],
+          'enabled': productForm.enabled,
+          'images': allImagesSelectedFile,
           'interested': [],
           'price': productForm.price,
           'promotion': productForm.promotion,
-          "rating": 0.0,
+             'sizes': productForm.sizes,
+          'rating': 0.0,
           'subtitle': productForm.subtitle,
           'title': productForm.title,
         });
-        // await _uploadImages(dr.documentID);
-        await productImagesUpdate(companyId, dr.id,
-            allImagesSelectedFile); //productImagesUpdate(product.documentID);
-        print('6\n666\n666\n6666\n66666\n666666\n6666666\n66666666\n' +
-            allImagesSelectedFile.toString());
-        // await dr.updateData(unsavedData);
-        await FirebaseFirestore.instance
-            .collection('companies')
-            .doc(companyId)
-            .collection('products')
-            .doc(dr.id)
-            .update({
-          'images': allImagesSelectedFile,
-        });
-        // await ProductsCollection()
-        //     .productUpdate(companyId, productForm, allImagesSelectedFile);
+        // await productImagesUpdate(widget.reqCompanyTitle,
+        //     widget.reqCategoryTitle, productForm.title, allImagesSelectedFile);
+        // await FirebaseFirestore.instance
+        //     .collection('companies')
+        //     .doc(widget.reqCompanyTitle)
+        //     .collection('products')
+        //     .doc(dr.id)
+        //     .update({
+        //   'images': allImagesSelectedFile,
+        // });
       }
-
-      // try {
-      //   if (_formData['id'] == null) {
-      //      print(
-      //             '1\n11\n111\n1111\n11111\n111111\n1111111\n11111111\n' +
-      //                 imagesSelectedList.toString());
-      //     // testelistaa =
-      //     ProductsCollection()
-      //         .productInsert(companyId, productForm, imagesSelectedList);
-      //   } else {
-      //     // await ProductsCollection().productUpdate(productForm);
-      //   }
-      // Navigator.of(context).pop();
-      // } catch (error) {
-      //   await showDialog<Null>(
-      //     context: context,
-      //     builder: (ctx) => AlertDialog(
-      //       title: Text('Ocorreu um erro!'),
-      //       content: Text('Ocorreu um erro pra salvar o produto!'),
-      //       actions: <Widget>[
-      //         TextButton(
-      //           child: Text('Fechar'),
-      //           onPressed: () => Navigator.of(context).pop(),
-      //         ),
-      //       ],
+    } catch (error) {
+      // showModalBottomSheet(
+      //   context: context,
+      //   builder: (_) => Container(
+      //     height: 140,
+      //     child: Column(
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: [Text('error: ' + error.toString())],
       //     ),
-      //   );
+      //   ),
+      // );
+      // await showDialog<Null>(
+      //   context: context,
+      //   builder: (ctx) => AlertDialog(
+      //     title: Text('Ocorreu um erro!'),
+      //     content: Text('Ocorreu um erro pra salvar o produto!'),
+      //     actions: <Widget>[
+      //       FlatButton(
+      //         child: Text('Fechar'),
+      //         onPressed: () => Navigator.of(context).pop(),
+      //       ),
+      //     ],
+      //   ),
+      // );
     } finally {
-      // ProductsCollection().productImagesUpdate(companyId,'OSlClAmGC5tqMjoZYhhU',testelistaa);
       setState(() {
         _deviceIsLoading = false;
+        allImagesSelectedFile = [];
+        // allImagesSelectedFile = [];
+        // _formData.clear();
       });
     }
   }
@@ -296,7 +279,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
         break;
     }
 
-    File cropped = await ImageCropper.cropImage(
+    File croppedImage = await ImageCropper.cropImage(
       sourcePath: selectedImage.path,
       aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       compressQuality: 100,
@@ -314,10 +297,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
     );
 
     setState(() {
-      allImagesSelectedFile.add(File(cropped.path));
+      allImagesSelectedFile.add(File(croppedImage.path));
     });
-    if (allImagesSelectedFile.length >= 5) {
-      Navigator.of(context).pop();
+    if (allImagesSelectedFile.length >= 1) {
+      // Navigator.of(context).pop();
       FocusScope.of(context).requestFocus(_titleFocusNode);
     }
   }
@@ -328,30 +311,30 @@ class _ProductFormPageState extends State<ProductFormPage> {
       backgroundColor: AppColors.astronautCanvasColor,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: AppColors.astratosDarkGreyColor,
+        backgroundColor: AppColors.astronautCanvasColor,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             MyFlutterApp.left_open_big,
             size: 20,
-            color: AppColors.astronautCanvasColor,
+            color: AppColors.astratosDarkGreyColor,
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
           },
         ),
         title: Text(
-          "P R O D U T O",
+          widget.reqCompanyTitle,
           style: TextStyle(
             fontSize: 18,
             fontFamily: 'Astronaut_PersonalUse',
-            color: AppColors.astronautCanvasColor,
+            color: AppColors.astratosDarkGreyColor,
           ),
         ),
         actions: <Widget>[
           IconButton(
             icon: Icon(MyFlutterApp.floppy),
-            color: AppColors.astronautCanvasColor,
+            color: AppColors.astratosDarkGreyColor,
             onPressed: () {
               _saveForm();
             },
@@ -367,6 +350,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 key: _formKey,
                 child: Column(
                   children: [
+                    // allImagesSelectedFile is List<File> &&
                     allImagesSelectedFile.length != 0
                         ? Container(
                             width: MediaQuery.of(context).size.width,
@@ -384,19 +368,41 @@ class _ProductFormPageState extends State<ProductFormPage> {
                               },
                             ),
                           )
-                        : Stack(
-                            children: [
-                              FadeInImage(
-                                height: MediaQuery.of(context).size.width - 128,
-                                width: (kIsWeb
-                                    ? 400
-                                    : MediaQuery.maybeOf(context).size.width),
-                                placeholder: AssetImage('assets/logo/logo.png'),
-                                image: AssetImage('assets/logo/logo.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              // ),
-                            ],
+                        : Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.width - 64,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/background.png"),
+                                    fit: BoxFit.cover)),
+                            // child: Stack(
+                            //   children: [
+                            //     Padding(
+                            //       padding: const EdgeInsets.fromLTRB(
+                            //         50.0,
+                            //         0.0,
+                            //         50.0,
+                            //         0.0,
+                            //       ),
+                            //       child: FadeInImage(
+                            //         height:
+                            //             MediaQuery.of(context).size.width - 128,
+                            //         width: (kIsWeb
+                            //             ? 400
+                            //             : MediaQuery.maybeOf(context)
+                            //                 .size
+                            //                 .width),
+                            //         placeholder: AssetImage(
+                            //             'assets/logo/marca_dagua.png'),
+                            //         image: AssetImage(
+                            //             'assets/logo/marca_dagua.png'),
+                            //         fit: BoxFit.cover,
+                            //       ),
+                            //     ),
+                            //     // ),
+                            //   ],
+                            // ),
                           ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -568,8 +574,50 @@ class _ProductFormPageState extends State<ProductFormPage> {
                               ),
                             ],
                           ),
+                          // Container(
+                          //   padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                          //   width: MediaQuery.of(context).size.width,
+                          //   child: DropdownButtonHideUnderline(
+                          //     child: ButtonTheme(
+                          //       layoutBehavior:
+                          //           ButtonBarLayoutBehavior.constrained,
+                          //       minWidth: MediaQuery.of(context).size.width,
+                          //       child: DropdownButton<String>(
+                          //         value: _formData['type'],
+                          //         icon: const Icon(Icons.arrow_downward,
+                          //             color: Colors.black),
+                          //         iconSize: 24,
+                          //         elevation: 0,
+                          //         dropdownColor: Colors.black,
+                          //         focusNode: _typeFocusNode,
+                          //         style: const TextStyle(
+                          //             color: AppColors.accentColor),
+                          //         underline: Container(
+                          //           height: 0,
+                          //         ),
+                          //         items: <String>['Produto', 'Serviço']
+                          //             .map<DropdownMenuItem<String>>(
+                          //                 (String value) {
+                          //           return DropdownMenuItem<String>(
+                          //             value: value,
+                          //             child: Text(value),
+                          //           );
+                          //         }).toList(),
+                          //         onChanged: (String newValue) {
+                          //           setState(() {
+                          //             _formData['type'] = newValue;
+                          //           });
+                          //           FocusScope.of(context)
+                          //               .requestFocus(_titleFocusNode);
+                          //         },
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          Divider(color: Colors.grey, thickness: 2),
                           TextFormField(
-                            initialValue: 'teste',
+                            initialValue:
+                                _formData['title'].toString(), //'teste',
                             textInputAction: TextInputAction.next,
                             focusNode: _titleFocusNode,
                             style: ProductStyles().inputTextStyle(),
@@ -585,13 +633,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             onSaved: (value) => _formData['title'] = value,
                           ),
                           TextFormField(
-                            initialValue: 'teste',
+                            initialValue:
+                                _formData['subtitle'].toString(), //'teste',
                             // autofocus: true,
                             textInputAction: TextInputAction.next,
                             focusNode: _subtitleFocusNode,
                             style: ProductStyles().inputTextStyle(),
                             decoration: ProductStyles().inputTextDecoration(
-                                'Subtítulo', 'Lançamento/P e PP/36 a 44...'),
+                                'Subtítulo',
+                                'Lançamento/Ultima unidade/exclusivo...'),
                             onFieldSubmitted: (_) {
                               FocusScope.of(context)
                                   .requestFocus(_priceFocusNode);
@@ -608,7 +658,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                 minWidth: MediaQuery.of(context).size.width,
                                 child: DropdownButton<String>(
                                   value: _formData['coin'],
-                                  icon: const Icon(Icons.arrow_downward),
+                                  icon: const Icon(Icons.arrow_downward,
+                                      color: Colors.black),
                                   iconSize: 24,
                                   elevation: 0,
                                   dropdownColor: Colors.black,
@@ -637,16 +688,18 @@ class _ProductFormPageState extends State<ProductFormPage> {
                               ),
                             ),
                           ),
+                          Divider(color: Colors.grey, thickness: 2),
                           TextFormField(
-                            initialValue: zz?.toStringAsFixed(2),
+                            initialValue: _formData['price']
+                                .toString(), //zz?.toStringAsFixed(2),
                             // autofocus: true,
                             focusNode: _priceFocusNode,
                             textInputAction: TextInputAction.next,
                             keyboardType:
                                 TextInputType.numberWithOptions(decimal: true),
                             style: ProductStyles().inputTextStyle(),
-                            decoration: ProductStyles()
-                                .inputTextDecoration('Preço original', ''),
+                            decoration: ProductStyles().inputTextDecoration(
+                                'Preço original', 'Valor do produto/serviço'),
                             onFieldSubmitted: (_) {
                               FocusScope.of(context)
                                   .requestFocus(_promotionFocusNode);
@@ -664,7 +717,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             },
                           ),
                           TextFormField(
-                            initialValue: zz?.toStringAsFixed(2),
+                            initialValue: _formData['promotion']
+                                .toString(), //?.toStringAsFixed(2),
                             // autofocus: true,
                             focusNode: _promotionFocusNode,
                             textInputAction: TextInputAction.next,
@@ -689,8 +743,25 @@ class _ProductFormPageState extends State<ProductFormPage> {
                               }
                             },
                           ),
+                          // P e PP/36 a 44
+                          Text(
+                            "Tamanhos",
+                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                          ),
+                          ProductSizes(
+                            context: context,
+                            initialValue:
+                                _formData['sizes'], //snapshot.data["sizes"],
+                            onSaved: (value) => _formData['sizes'] = value,
+                            validator: (s) {
+                              // if (s.isEmpty)
+                              //   return "";
+                              // else
+                              return null;
+                            },
+                          ),
                           TextFormField(
-                            initialValue: '',
+                            initialValue: _formData['description'],
                             // autofocus: true,
                             minLines: 1,
                             maxLines: 12,
@@ -700,27 +771,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
                               letterSpacing: 2,
                               color: AppColors.accentColor,
                             ),
-                            decoration: InputDecoration(
-                              suffixIcon: Icon(Icons.map,
-                                  color: AppColors.astratosDarkGreyColor),
-                              hintText:
-                                  'Entregamos por todo DF, de segunda a sábado...',
-                              labelText: 'Descrição',
-                              labelStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.astratosDarkGreyColor,
-                              ),
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              border: InputBorder.none,
-                            ),
+                            decoration: ProductStyles().inputTextDecoration(
+                                'Descrição',
+                                'Entregamos por todo DF, de segunda a sábado...'),
                             validator: (value) {
                               return null;
                             },
                             onSaved: (value) =>
                                 _formData['description'] = value,
                           ),
+                          SizedBox(height: 128,)
                         ],
                       ),
                     ),
