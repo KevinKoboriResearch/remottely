@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'utils/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:remottely/router/user_router_delegate.dart';
-import 'package:remottely/router/user_route_information_parser.dart';
+import 'package:remottely/router/remottely_router_delegate.dart';
+import 'package:remottely/router/remottely_route_information_parser.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

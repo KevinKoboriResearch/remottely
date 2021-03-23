@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:remottely/models/current_user_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:remottely/router/user_app_state.dart';
+import 'package:remottely/router/remottely_app_state.dart';
 import 'package:remottely/router/animations/fade_animation_page.dart';
 import 'package:remottely/router/routes.dart';
 // import 'package:remottely/views/device/device_form_page.dart';
@@ -12,17 +12,17 @@ import 'package:remottely/views/shop_screen.dart';
 // import 'package:remottely/views/device/devices_page_list.dart';
 import 'package:remottely/views/products/product_form_page.dart';
 // import 'package:remottely/views/user/user_perfil_page.dart';
-// import 'package:remottely/views/users_list_screen.dart';
-// import 'package:remottely/views/user_detail_screen.dart';
+import 'package:remottely/views/users_list_screen.dart';
+import 'package:remottely/views/user_detail_screen.dart';
 
 import 'package:remottely/providers/google_sign_in.dart';
 import 'package:provider/provider.dart';
 class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<UserRoutePath> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  UsersAppState get appState => _appState;
-  UsersAppState _appState;
-  set appState(UsersAppState value) {
+  RemottelyAppState get appState => _appState;
+  RemottelyAppState _appState;
+  set appState(RemottelyAppState value) {
     if (value == _appState) {
       return;
     }
@@ -38,24 +38,24 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
       key: navigatorKey,
       pages: [
         if (appState.selectedIndex == 0)
+          // FadeAnimationPage(
+          //   child: Container(),
+          //   key: ValueKey('HomePage'),
+          // )
+        ...[
           FadeAnimationPage(
-            child: Container(),
-            key: ValueKey('HomePage'),
-          )
-        // ...[
-        //   FadeAnimationPage(
-        //     child: UsersListScreen(
-        //       users: appState.users,
-        //       onTapped: _handleUserTapped,
-        //     ),
-        //     key: ValueKey('UsersListPage'),
-        //   ),
-        //   if (appState.selectedUser != null)
-        //     MaterialPage(
-        //       key: ValueKey(appState.selectedUser),
-        //       child: UserDetailsScreen(user: appState.selectedUser),
-        //     ),
-        // ]
+            child: UsersListScreen(
+              users: appState.users,
+              onTapped: _handleUserTapped,
+            ),
+            key: ValueKey('UsersListPage'),
+          ),
+          if (appState.selectedUser != null)
+            FadeAnimationPage(
+              key: ValueKey(appState.selectedUser),
+              child: UserDetailsScreen(user: appState.selectedUser),
+            ),
+        ]
         else if (appState.selectedIndex == 1)
           FadeAnimationPage(
             child: ShopScreen(),

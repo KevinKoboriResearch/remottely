@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:remottely/models/current_user_model.dart';
 
-class UsersAppState extends ChangeNotifier {
+class RemottelyAppState extends ChangeNotifier {
   int _selectedIndex;
 
   User _privateSelectedUser;
@@ -12,7 +12,7 @@ class UsersAppState extends ChangeNotifier {
     User('leandro', '21'),
   ];
 
-  UsersAppState() : _selectedIndex = 0;
+  RemottelyAppState() : _selectedIndex = 0;
 
   int get selectedIndex => _selectedIndex;
 

@@ -13,8 +13,9 @@ class SignUpWidget extends StatelessWidget {
               backgroundColor: MaterialStateProperty.resolveWith<Color>(
                 (Set<MaterialState> states) {
                   if (states.contains(MaterialState.pressed))
-                    return Colors.blue;
-                  return Colors.white;//Color(0xffDDDDDD); // Use the component's default.
+                    return Colors.deepOrange;
+                  return Colors
+                      .white; //Color(0xffDDDDDD); // Use the component's default.
                 },
               ),
             ),
@@ -37,72 +38,60 @@ class SignUpWidget extends StatelessWidget {
                   ),
                 ),
                 Spacer(flex: 2),
-                Container(
-                  width: 134,
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                      depth: 3,
-                      color: Colors.white,//Color(0xffDDDDDD),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'G',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.blue),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'G',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.blue),
-                          ),
-                          Text(
-                            'o',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.red),
-                          ),
-                          Text(
-                            'o',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.yellow[800]),
-                          ),
-                          Text(
-                            'g',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.blue),
-                          ),
-                          Text(
-                            'l',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.green),
-                          ),
-                          Text(
-                            'e',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.red),
-                          ),
-                          // Icon(RemottelyIcons.google,color: Colors.red,),
-                          Text(
-                            ' Login', //'Sign In With ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.grey[600]),
-                          ),
-                        ],
-                      ),
+                    Text(
+                      'o',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.red),
                     ),
-                  ),
+                    Text(
+                      'o',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.yellow[800]),
+                    ),
+                    Text(
+                      'g',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.blue),
+                    ),
+                    Text(
+                      'l',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.green),
+                    ),
+                    Text(
+                      'e',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.red),
+                    ),
+                    // Icon(RemottelyIcons.google,color: Colors.red,),
+                    Text(
+                      ' Login', //'Sign In With ',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.grey[600]),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 16),
                 Text(

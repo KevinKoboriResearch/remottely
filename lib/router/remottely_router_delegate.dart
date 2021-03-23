@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:remottely/router/user_app_state.dart';
+import 'package:remottely/router/remottely_app_state.dart';
 import 'package:remottely/views/control/app_shell.dart';
 import 'package:remottely/router/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +14,7 @@ class UserRouterDelegate extends RouterDelegate<UserRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<UserRoutePath> {
   final GlobalKey<NavigatorState> navigatorKey;
 
-  UsersAppState appState = UsersAppState();
+  RemottelyAppState appState = RemottelyAppState();
 
   UserRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>() {
     appState.addListener(notifyListeners);

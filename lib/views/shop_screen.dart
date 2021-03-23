@@ -121,58 +121,45 @@ class _ShopScreenState extends State<ShopScreen> {
                           ),
                         ),
                         Spacer(flex: 2),
-                        Container(
-                          width: 104,
-                          child: Neumorphic(
-                            style: NeumorphicStyle(
-                              depth: 3,
-                              color: Colors.white, //Color(0xffDDDDDD),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Criar ', //'Sign In With ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.grey[600]),
                             ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Criar ', //'Sign In With ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.grey[600]),
-                                  ),
-                                  Text(
-                                    'L',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.blue),
-                                  ),
-                                  Text(
-                                    'o',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.red),
-                                  ),
-                                  Text(
-                                    'j',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.yellow[800]),
-                                  ),
-                                  Text(
-                                    'a',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.green),
-                                  ),
-                                ],
-                              ),
+                            Text(
+                              'L',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.blue),
                             ),
-                          ),
+                            Text(
+                              'o',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.red),
+                            ),
+                            Text(
+                              'j',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.yellow[800]),
+                            ),
+                            Text(
+                              'a',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.green),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 16),
                         Text(
@@ -191,47 +178,103 @@ class _ShopScreenState extends State<ShopScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            //     return LayoutCustomScrollView(0, DevicesPageList(), 'C H A V E S',
-            //         snapshotProducts, DevicesPageItem(snapshotProducts));
-            //   },
-            // );
             return Center(
               child: Container(
                 width: 1000,
                 child: CustomScrollView(
                   slivers: [
                     SliverAppBar(
-                      pinned: true,
+                      floating: true,
+                      snap: true,
                       backgroundColor: Colors.white,
-                      elevation: 0,
-                      toolbarHeight: 0,
-                      expandedHeight: 60,
-                      leading: Container(width:0.0, height: 0.0),
+                      elevation: 0.0,
+                      toolbarHeight: 40,
+                      expandedHeight: 40,
                       flexibleSpace: FlexibleSpaceBar(
-                        background: Column(
+                        centerTitle: false,
+                        titlePadding: EdgeInsets.fromLTRB(14.0, 0.0, 14.0, 0.0),
+                        title: Row(
                           children: [
-                            Spacer(flex: 3),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 16.0),
-                                  child: Text(
-                                      snapshotProducts.hasData
-                                          ? snapshotProducts.data.docs[0]
-                                              ['companyTitle']
-                                          : '', //'tapanapanterahs',
-                                      style: TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey[800])),
-                                ),
-                              ],
-                            ),
+                            Text(
+                                snapshotProducts.hasData
+                                    ? snapshotProducts.data.docs[0]
+                                        ['companyTitle']
+                                    : '',
+                                style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[800])),
                             Spacer(),
+                            Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.rotationY(math.pi),
+                              child: NeumorphicIcon(
+                                MyFlutterApp.sort,
+                                size: 32,
+                                style: NeumorphicStyle(
+                                  depth: 1,
+                                  color: AppColors.textColor,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
+
+                        // Text(
+                        //     snapshotProducts.hasData
+                        //         ? snapshotProducts.data.docs[0]['companyTitle']
+                        //         : '',
+                        //     style: TextStyle(
+                        //         fontSize: 28,
+                        //         fontWeight: FontWeight.bold,
+                        //         color: Colors.grey[800])),
+                        //   background: Column(
+                        //     children: [
+                        //       Spacer(flex: 3),
+                        //       Row(
+                        //         children: [
+                        //           Spacer(),
+                        //           Icon(Icons.menu),
+                        //         ],
+                        //       ),
+                        //       Spacer(),
+                        //     ],
+                        //   ),
                       ),
                     ),
+                    // SliverAppBar(
+                    //   pinned: true,
+                    //   // snap: true,
+                    //   backgroundColor: Colors.white,
+                    //   elevation: 0,
+                    //   toolbarHeight: 0,
+                    //   expandedHeight: 60,
+                    //   leading: Container(width: 0.0, height: 0.0),
+                    //   flexibleSpace: FlexibleSpaceBar(
+                    //     background: Column(
+                    //       children: [
+                    //         Spacer(flex: 3),
+                    //         Row(
+                    //           children: [
+                    //             Padding(
+                    //               padding: const EdgeInsets.only(left: 16.0),
+                    //               child: Text(
+                    //                   snapshotProducts.hasData
+                    //                       ? snapshotProducts.data.docs[0]
+                    //                           ['companyTitle']
+                    //                       : '', //'tapanapanterahs',
+                    //                   style: TextStyle(
+                    //                       fontSize: 28,
+                    //                       fontWeight: FontWeight.bold,
+                    //                       color: Colors.grey[800])),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //         Spacer(),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     SliverAppBar(
                       pinned: true,
                       backgroundColor: Colors.white,
@@ -287,8 +330,9 @@ class _ShopScreenState extends State<ShopScreen> {
                             //   child: ProductGridItem(),
                             // );
                           },
-                          childCount: snapshotProducts.data.docs
-                              .length, //products.length, // widget.snapshotProducts.data.docs.length,
+                          childCount: 50,
+                          // snapshotProducts.data.docs
+                          //     .length, //products.length, // widget.snapshotProducts.data.docs.length,
                         ),
                       ),
                     ),
