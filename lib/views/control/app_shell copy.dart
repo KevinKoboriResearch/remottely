@@ -130,36 +130,6 @@ class _AppShellState extends State<AppShell> {
                 routerDelegate: _routerDelegate,
                 backButtonDispatcher: _backButtonDispatcher,
               ),
-            //   bottomNavigationBar: BottomNavigationBar(
-            //     elevation: 0,
-            //     items: [
-            //       BottomNavigationBarItem(
-            //           icon: Icon(Icons.verified_user, color: Colors.white),
-            //           label: 'users',
-            //           backgroundColor: Colors.yellow[700]),
-            //       BottomNavigationBarItem(
-            //           icon: Icon(Icons.search, color: Colors.white),
-            //           label: 'search',
-            //           backgroundColor: Colors.blue),
-            //       BottomNavigationBarItem(
-            //           icon: Icon(Icons.menu, color: Colors.white),
-            //           label: 'shop',
-            //           backgroundColor: Colors.grey),
-            //       BottomNavigationBarItem(
-            //           icon: Icon(Icons.car_rental, color: Colors.white),
-            //           label: 'orders',
-            //           backgroundColor: Colors.green),
-            //       BottomNavigationBarItem(
-            //           icon: Icon(Icons.supervised_user_circle,
-            //               color: Colors.white),
-            //           label: 'profile',
-            //           backgroundColor: Colors.red),
-            //     ],
-            //     currentIndex: appState.selectedIndex,
-            //     onTap: (newIndex) {
-            //       appState.selectedIndex = newIndex;
-            //     },
-            //   ),
             ),
           ),
         );
