@@ -6,7 +6,7 @@ class DrawerProvider with ChangeNotifier {
   int pageIndex;
 
   DrawerProvider({
-    this.pageIndex = 3,
+    this.pageIndex,
   });
   void changeIndex(int index) {
     pageIndex = index;

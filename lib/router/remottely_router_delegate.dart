@@ -34,6 +34,8 @@ class UserRouterDelegate extends RouterDelegate<UserRoutePath>
         return OrdersPath();
       } else if (appState.selectedIndex == 4) {
         return ProfilePath();
+      } else if (appState.selectedIndex == 5) {
+        return Error404Path();
       } else {
         return Error404Path();
       }
@@ -137,11 +139,13 @@ class UserRouterDelegate extends RouterDelegate<UserRoutePath>
       appState.selectedIndex = 3;
     } else if (path is ProfilePath) {
       appState.selectedIndex = 4;
+    } else if (path is Error404Path) {
+      appState.selectedIndex = 5;
     } else if (path is UsersDetailsPath) {
       appState.setSelectedUserById(path.id);
     }
-    // else {
-    //   appState.selectedUser = null;
-    // }
+    else {
+      appState.selectedUser = null;
+    }
   }
 }

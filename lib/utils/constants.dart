@@ -39,7 +39,7 @@ class AppColors {
   static const Color astronautCanvasColor = Colors.white; //Color(0XFFe5eff9);
   static const Color astronautConvexColor = Colors.white; //Color(0XFFe8f0f8);
   static const Color astronautConcaveColor = Colors.white; //Color(0XFFe3ecf5);
-  static const Color astronautDarkBlueColor = Color(0XFF334368);
+  static Color astronautDarkBlueColor = Colors.grey[800];//Color(0XFF334368);
   // static const Color astronautOrangeColor = Color(0XFFff5823);
   static const Color astronautOrangeColor = Color(0XFFfc7a09);
   static const Color astronautOrangeDarkColor = Color(0XFFf05102);

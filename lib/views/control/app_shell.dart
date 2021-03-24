@@ -20,6 +20,15 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 import 'package:remottely/providers/drawer_provider.dart';
 import 'package:remottely/views/control/app_drawer.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+// import 'utils/constants.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:remottely/router/remottely_router_delegate.dart';
+import 'package:remottely/router/remottely_route_information_parser.dart';
+import 'package:provider/provider.dart';
+import 'package:remottely/providers/drawer_provider.dart';
 
 GlobalKey<ScaffoldState> _appShellScaffoldKey = new GlobalKey<ScaffoldState>();
 toggleDrawer() async {
@@ -78,29 +87,50 @@ class _AppShellState extends State<AppShell> {
   //     _appShellScaffoldKey.currentState.openDrawer();
   //   }
   // }
+  UserRouteInformationParser _routeInformationParser =
+      UserRouteInformationParser();
+  // var drawerProvider = Provider.of<DrawerProvider>(context, listen: false);
+  // drawerProvider = _routeInformationParser.getRouteAppStateIndex();
 
   @override
   Widget build(BuildContext context) {
     _backButtonDispatcher.takePriority();
-
+    var appState = widget.appState;
     return Consumer<DrawerProvider>(
       builder: (ctx, drawerProvider, _) {
-        widget.appState.selectedIndex = drawerProvider.pageIndex;
-        return Scaffold(
-          key: _appShellScaffoldKey,
-          extendBody: true,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            toolbarHeight: 0,
-            elevation: 0,
-            leading: Container(),
-            title: Container(),
-            actions: [],
-          ),
-          drawer: CustomDrawer(),
-          body: Router(
-            routerDelegate: _routerDelegate,
-            backButtonDispatcher: _backButtonDispatcher,
+        if (drawerProvider.pageIndex != null) {
+          appState.selectedIndex = drawerProvider.pageIndex;
+          drawerProvider.pageIndex = null;
+        } else {
+          var route = _routeInformationParser.getRouteAppStateIndex();
+          if (route != null) {
+            appState.selectedIndex = route;
+          } else {
+            // appState.selectedIndex = 0;
+          }
+          // appState.selectedIndex = drawerProvider.pageIndex;
+        }
+        return Center(
+          child: Container(
+            width: 1000,
+            height: MediaQuery.of(context).size.height,
+            child: Scaffold(
+              key: _appShellScaffoldKey,
+              extendBody: true,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                toolbarHeight: 0,
+                elevation: 0,
+                leading: Container(),
+                title: Container(),
+                actions: [],
+              ),
+              drawer: CustomDrawer(),
+              body: Router(
+                routerDelegate: _routerDelegate,
+                backButtonDispatcher: _backButtonDispatcher,
+              ),
+            ),
           ),
         );
       },

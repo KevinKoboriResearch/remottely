@@ -23,12 +23,21 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+// final BuildContext context;
+// UserRouteInformationParser({this.context});
+// getDrawerProvider() {
+// return drawerProvider;
+// }
+// getDrawerProvider().pageIndex = 1;
+
 class _MyAppState extends State<MyApp> {
   UserRouterDelegate _routerDelegate = UserRouterDelegate();
   UserRouteInformationParser _routeInformationParser =
       UserRouteInformationParser();
   @override
   Widget build(BuildContext context) {
+    // var drawerProvider = Provider.of<DrawerProvider>(context, listen: false);
+    // drawerProvider = _routeInformationParser.getRouteAppStateIndex();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:remottely/models/product_model.dart';
 import 'package:remottely/utils/my_flutter_app_icons.dart';
 import 'package:remottely/utils/constants.dart';
@@ -93,8 +94,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
         _formData['enabled'] = widget.reqProduct.data()['enabled'];
         _formData['images'] = widget.reqProduct.data()['images'];
         _formData['interested'] = widget.reqProduct.data()['interested'];
-        _formData['price'] = widget.reqProduct.data()['price'];
-        _formData['promotion'] = widget.reqProduct.data()['promotion'];
+        _formData['price'] = widget.reqProduct.data()['price'].toString();
+        _formData['promotion'] =
+            widget.reqProduct.data()['promotion'].toString();
         _formData['rating'] = widget.reqProduct.data()['rating'];
         _formData['sizes'] = widget.reqProduct.data()['sizes'];
         _formData['subtitle'] = widget.reqProduct.data()['subtitle'];
@@ -128,7 +130,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
     }
 
     if (allImagesSelectedFile.length == 0) {
-      showFlushbar(context, 'msgTitle', 'msg');
+      showFlushbar(
+          context, 'Atenção!', 'É necessário inserir ao menos uma imagem!');
       return;
     }
 
@@ -157,8 +160,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
     });
     // var widget.reqCompanyTitle = 'bwBiNTo7yOIUYehamSmD';
 
-    Future productImagesUpdate(
-        companyTitle, categoryTitle, productTitle, allImagesSelectedFile) async {
+    Future productImagesUpdate(companyTitle, categoryTitle, productTitle,
+        allImagesSelectedFile) async {
       for (int i = 0; i < allImagesSelectedFile.length; i++) {
         if (allImagesSelectedFile[i] is String) continue;
 
@@ -194,8 +197,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
       } else {
         // DocumentReference dr =
         await productImagesUpdate(
-          productForm.companyTitle,
-            productForm.categoryTitle, productForm.title, 
+            productForm.companyTitle,
+            productForm.categoryTitle,
+            productForm.title,
             allImagesSelectedFile);
         await FirebaseFirestore.instance
             // .collection('companies')
@@ -218,23 +222,14 @@ class _ProductFormPageState extends State<ProductFormPage> {
           'interested': [],
           'price': productForm.price,
           'promotion': productForm.promotion,
-             'sizes': productForm.sizes,
-          'rating': 0.0,
+          'sizes': productForm.sizes,
+          'rating': _formData['rating'],
           'subtitle': productForm.subtitle,
           'title': productForm.title,
         });
-        // await productImagesUpdate(widget.reqCompanyTitle,
-        //     widget.reqCategoryTitle, productForm.title, allImagesSelectedFile);
-        // await FirebaseFirestore.instance
-        //     .collection('companies')
-        //     .doc(widget.reqCompanyTitle)
-        //     .collection('products')
-        //     .doc(dr.id)
-        //     .update({
-        //   'images': allImagesSelectedFile,
-        // });
       }
     } catch (error) {
+      showFlushbar(context, 'Erro ao inserir item!', '$error');
       // showModalBottomSheet(
       //   context: context,
       //   builder: (_) => Container(
@@ -299,8 +294,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setState(() {
       allImagesSelectedFile.add(File(croppedImage.path));
     });
-    if (allImagesSelectedFile.length >= 1) {
-      // Navigator.of(context).pop();
+    if (allImagesSelectedFile.length >= 5) {
+      Navigator.of(context).pop();
       FocusScope.of(context).requestFocus(_titleFocusNode);
     }
   }
@@ -309,485 +304,528 @@ class _ProductFormPageState extends State<ProductFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.astronautCanvasColor,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: AppColors.astronautCanvasColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            MyFlutterApp.left_open_big,
-            size: 20,
-            color: AppColors.astratosDarkGreyColor,
-          ),
-          onPressed: () {
-            // Navigator.of(context).pop();
-          },
-        ),
-        title: Text(
-          widget.reqCompanyTitle,
-          style: TextStyle(
-            fontSize: 18,
-            fontFamily: 'Astronaut_PersonalUse',
-            color: AppColors.astratosDarkGreyColor,
-          ),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(MyFlutterApp.floppy),
-            color: AppColors.astratosDarkGreyColor,
-            onPressed: () {
-              _saveForm();
-            },
-          )
-        ],
-      ),
       body: _deviceIsLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    // allImagesSelectedFile is List<File> &&
-                    allImagesSelectedFile.length != 0
-                        ? Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.width - 64,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: allImagesSelectedFile.length,
-                              itemBuilder: (context, index) {
-                                return Image.file(
-                                  allImagesSelectedFile[index],
-                                  width: MediaQuery.of(context).size.width - 64,
-                                  height: MediaQuery.of(context).size.width,
-                                  fit: BoxFit.cover,
-                                );
+          : Center(
+            child: Container(
+              width: 500,
+              child: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      floating: true,
+                      snap: true,
+                      backgroundColor: Colors.white,
+                      elevation: 0.0,
+                      toolbarHeight: 40,
+                      expandedHeight: 40,
+                      flexibleSpace: FlexibleSpaceBar(
+                        centerTitle: false,
+                        titlePadding: EdgeInsets.fromLTRB(14.0, 0.0, 12.0, 0.0),
+                        title: Row(
+                          children: [
+                            InkWell(
+                              child: Icon(
+                                Icons.arrow_back,
+                                size: 20,
+                                color: Colors.grey[800],
+                              ),
+                              onTap: () {
+                                Navigator.of(context).pop();
                               },
                             ),
-                          )
-                        : Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.width - 64,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/background.png"),
-                                    fit: BoxFit.cover)),
-                            // child: Stack(
-                            //   children: [
-                            //     Padding(
-                            //       padding: const EdgeInsets.fromLTRB(
-                            //         50.0,
-                            //         0.0,
-                            //         50.0,
-                            //         0.0,
-                            //       ),
-                            //       child: FadeInImage(
-                            //         height:
-                            //             MediaQuery.of(context).size.width - 128,
-                            //         width: (kIsWeb
-                            //             ? 400
-                            //             : MediaQuery.maybeOf(context)
-                            //                 .size
-                            //                 .width),
-                            //         placeholder: AssetImage(
-                            //             'assets/logo/marca_dagua.png'),
-                            //         image: AssetImage(
-                            //             'assets/logo/marca_dagua.png'),
-                            //         fit: BoxFit.cover,
+                            SizedBox(width: 16),
+                            Text(widget.reqCompanyTitle,
+                                style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[800])),
+                            Spacer(),
+                            // InkWell(
+                            //   onTap: () {
+                            //     _saveForm();
+                            //   },
+                            //   child: Padding(
+                            //     padding:
+                            //         const EdgeInsets.fromLTRB(0.0, 6.0, 0.0, 0.0),
+                            //     child: NeumorphicIcon(
+                            //       MyFlutterApp.floppy,
+                            //       size: 32,
+                            //       style: NeumorphicStyle(
+                            //         depth: 1,
+                            //         color: Colors.grey[800],
                             //       ),
                             //     ),
-                            //     // ),
-                            //   ],
+                            //   ),
                             // ),
-                          ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8.0,
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: 8.0,
+                          ],
+                        ),
                       ),
+                    ),
+                    SliverToBoxAdapter(
                       child: Column(
-                        children: <Widget>[
-                          // SizedBox(
-                          //   height: 10,
-                          // ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              ElevatedButton(
-                                child: Text(
-                                  allImagesSelectedFile.length >= 5
-                                      ? 'Limite de fotos atingido'
-                                      : 'Adicionar Foto',
-                                  style: TextStyle(
-                                    color: AppColors.astronautCanvasColor,
+                        children: [
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                // allImagesSelectedFile is List<File> &&
+                                allImagesSelectedFile.length != 0
+                                    ? Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        height:
+                                            kIsWeb ? 500 : MediaQuery.of(context).size.width - 64,
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: allImagesSelectedFile.length,
+                                          itemBuilder: (context, index) {
+                                            return Image.file(
+                                              allImagesSelectedFile[index],
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  64,
+                                              height:
+                                                  MediaQuery.of(context).size.width,
+                                              fit: BoxFit.cover,
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    : Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        height:
+                                             kIsWeb ? 500 : MediaQuery.of(context).size.width - 64,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    "assets/images/background.png"),
+                                                fit: BoxFit.cover)),
+                                      ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height * 0.8,
+                                  padding: const EdgeInsets.only(
+                                    top: 8.0,
+                                    left: 16.0,
+                                    right: 16.0,
+                                    bottom: 8.0,
                                   ),
-                                ),
-                                onPressed: allImagesSelectedFile.length >= 5
-                                    ? () {
-                                        FocusScope.of(context)
-                                            .requestFocus(_titleFocusNode);
-                                      }
-                                    : () {
-                                        // _uploadingImage
-                                        //     ? null
-                                        //     :
-                                        showModalBottomSheet(
-                                          context: context,
-                                          builder: (_) => Container(
-                                            height: 140,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    top: 16.0,
-                                                    left: 16.0,
-                                                  ),
-                                                  child: NeumorphicText(
-                                                    'F O T O  D A  C H A V E',
-                                                    style: NeumorphicStyle(
-                                                      depth: 1,
-                                                      color:
-                                                          AppColors.textColor,
-                                                    ),
-                                                    textStyle:
-                                                        NeumorphicTextStyle(
-                                                      fontFamily:
-                                                          'Astronaut_PersonalUse',
-                                                      fontSize: 22,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 26),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(width: 26),
-                                                    Container(
-                                                      width: 50,
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              // _deleteImage();
-                                                            },
-                                                            child:
-                                                                NeumorphicIcon(
-                                                              MyFlutterApp
-                                                                  .trash_1,
-                                                              size: 40,
-                                                              style:
-                                                                  NeumorphicStyle(
-                                                                depth: 1,
-                                                                color: AppColors
-                                                                    .textColor,
-                                                              ),
+                                  child: Column(
+                                    children: <Widget>[
+                                      // SizedBox(
+                                      //   height: 10,
+                                      // ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          ElevatedButton(
+                                            child: Text(
+                                              allImagesSelectedFile.length >= 5
+                                                  ? 'Limite de fotos atingido'
+                                                  : 'Adicionar Foto',
+                                              style: TextStyle(
+                                                color:
+                                                    allImagesSelectedFile.length >=
+                                                            5
+                                                        ? AppColors.blackColor
+                                                        : AppColors.accentColor,
+                                              ),
+                                            ),
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty
+                                                  .resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                                  if (states.contains(
+                                                      MaterialState.pressed)) {
+                                                    return allImagesSelectedFile
+                                                                .length >=
+                                                            5
+                                                        ? Colors.grey
+                                                        : Colors.deepOrange;
+                                                  }
+                                                  return allImagesSelectedFile
+                                                              .length >=
+                                                          5
+                                                      ? Colors.grey
+                                                      : Colors
+                                                          .black; //Color(0xffDDDDDD); // Use the component's default.
+                                                },
+                                              ),
+                                            ),
+                                            onPressed: allImagesSelectedFile
+                                                        .length >=
+                                                    5
+                                                ? () {
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            _titleFocusNode);
+                                                  }
+                                                : () {
+                                                    // _uploadingImage
+                                                    //     ? null
+                                                    //     :
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      builder: (_) => Container(
+                                                        height: 100,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(width: 26),
+                                                                Container(
+                                                                  width: 50,
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      InkWell(
+                                                                        onTap: () {
+                                                                          // _deleteImage();
+                                                                        },
+                                                                        child:
+                                                                            NeumorphicIcon(
+                                                                          MyFlutterApp
+                                                                              .trash_1,
+                                                                          size: 40,
+                                                                          style:
+                                                                              NeumorphicStyle(
+                                                                            depth:
+                                                                                1,
+                                                                            color: AppColors
+                                                                                .textColor,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Text('Todos'),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 46,
+                                                                ),
+                                                                Container(
+                                                                  width: 50,
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      InkWell(
+                                                                        onTap: () {
+                                                                          sourceImagem =
+                                                                              "camera";
+                                                                          _getImage();
+                                                                        },
+                                                                        child:
+                                                                            NeumorphicIcon(
+                                                                          MyFlutterApp2
+                                                                              .camera,
+                                                                          size: 40,
+                                                                          style:
+                                                                              NeumorphicStyle(
+                                                                            depth:
+                                                                                1,
+                                                                            color: AppColors
+                                                                                .textColor,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                          'Câmera'),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 46,
+                                                                ),
+                                                                Container(
+                                                                  width: 50,
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      InkWell(
+                                                                        onTap: () {
+                                                                          sourceImagem =
+                                                                              "gallery";
+                                                                          _getImage();
+                                                                        },
+                                                                        child:
+                                                                            NeumorphicIcon(
+                                                                          MyFlutterApp2
+                                                                              .picture,
+                                                                          size: 40,
+                                                                          style:
+                                                                              NeumorphicStyle(
+                                                                            depth:
+                                                                                1,
+                                                                            color: AppColors
+                                                                                .textColor,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                          'Galeria'),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ),
-                                                          Text('Todos'),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 46,
-                                                    ),
-                                                    Container(
-                                                      width: 50,
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              sourceImagem =
-                                                                  "camera";
-                                                              _getImage();
-                                                            },
-                                                            child:
-                                                                NeumorphicIcon(
-                                                              MyFlutterApp2
-                                                                  .camera,
-                                                              size: 40,
-                                                              style:
-                                                                  NeumorphicStyle(
-                                                                depth: 1,
-                                                                color: AppColors
-                                                                    .textColor,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Text('Câmera'),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 46,
-                                                    ),
-                                                    Container(
-                                                      width: 50,
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              sourceImagem =
-                                                                  "gallery";
-                                                              _getImage();
-                                                            },
-                                                            child:
-                                                                NeumorphicIcon(
-                                                              MyFlutterApp2
-                                                                  .picture,
-                                                              size: 40,
-                                                              style:
-                                                                  NeumorphicStyle(
-                                                                depth: 1,
-                                                                color: AppColors
-                                                                    .textColor,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Text('Galeria'),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                    );
+                                                  },
+                                          ),
+                                        ],
+                                      ),
+                                      TextFormField(
+                                        initialValue: _formData['title']
+                                            .toString(), //'teste',
+                                        textInputAction: TextInputAction.next,
+                                        focusNode: _titleFocusNode,
+                                        style: ProductStyles().inputTextStyle(),
+                                        decoration: ProductStyles()
+                                            .inputTextDecoration('Título',
+                                                'Camiseta de Malha Azul...'),
+                                        onFieldSubmitted: (_) {
+                                          FocusScope.of(context)
+                                              .requestFocus(_subtitleFocusNode);
+                                        },
+                                        validator: (value) {
+                                          return ProductValidators()
+                                              .validateTitle(value);
+                                        },
+                                        onSaved: (value) =>
+                                            _formData['title'] = value,
+                                      ),
+                                      TextFormField(
+                                        initialValue: _formData['subtitle']
+                                            .toString(), //'teste',
+                                        // autofocus: true,
+                                        textInputAction: TextInputAction.next,
+                                        focusNode: _subtitleFocusNode,
+                                        style: ProductStyles().inputTextStyle(),
+                                        decoration: ProductStyles().inputTextDecoration(
+                                            'Subtítulo',
+                                            'Lançamento/Ultima unidade/exclusivo...'),
+                                        onFieldSubmitted: (_) {
+                                          FocusScope.of(context)
+                                              .requestFocus(_priceFocusNode);
+                                        },
+                                        onSaved: (value) =>
+                                            _formData['subtitle'] = value,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                        width: MediaQuery.of(context).size.width,
+                                        child: DropdownButtonHideUnderline(
+                                          child: ButtonTheme(
+                                            layoutBehavior:
+                                                ButtonBarLayoutBehavior.constrained,
+                                            minWidth:
+                                                MediaQuery.of(context).size.width,
+                                            child: DropdownButton<String>(
+                                              value: _formData['coin'],
+                                              icon: const Icon(Icons.arrow_downward,
+                                                  color: Colors.black),
+                                              iconSize: 24,
+                                              elevation: 0,
+                                              dropdownColor: Colors.black,
+                                              focusNode: _coinFocusNode,
+                                              style: const TextStyle(
+                                                  color: AppColors.accentColor),
+                                              underline: Container(
+                                                height: 0,
+                                              ),
+                                              items: <String>['R\$', 'US\$', '€']
+                                                  .map<DropdownMenuItem<String>>(
+                                                      (String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(value),
+                                                );
+                                              }).toList(),
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  _formData['coin'] = newValue;
+                                                });
+                                                FocusScope.of(context)
+                                                    .requestFocus(_priceFocusNode);
+                                              },
                                             ),
                                           ),
-                                        );
-                                      },
-                              ),
-                            ],
-                          ),
-                          // Container(
-                          //   padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                          //   width: MediaQuery.of(context).size.width,
-                          //   child: DropdownButtonHideUnderline(
-                          //     child: ButtonTheme(
-                          //       layoutBehavior:
-                          //           ButtonBarLayoutBehavior.constrained,
-                          //       minWidth: MediaQuery.of(context).size.width,
-                          //       child: DropdownButton<String>(
-                          //         value: _formData['type'],
-                          //         icon: const Icon(Icons.arrow_downward,
-                          //             color: Colors.black),
-                          //         iconSize: 24,
-                          //         elevation: 0,
-                          //         dropdownColor: Colors.black,
-                          //         focusNode: _typeFocusNode,
-                          //         style: const TextStyle(
-                          //             color: AppColors.accentColor),
-                          //         underline: Container(
-                          //           height: 0,
-                          //         ),
-                          //         items: <String>['Produto', 'Serviço']
-                          //             .map<DropdownMenuItem<String>>(
-                          //                 (String value) {
-                          //           return DropdownMenuItem<String>(
-                          //             value: value,
-                          //             child: Text(value),
-                          //           );
-                          //         }).toList(),
-                          //         onChanged: (String newValue) {
-                          //           setState(() {
-                          //             _formData['type'] = newValue;
-                          //           });
-                          //           FocusScope.of(context)
-                          //               .requestFocus(_titleFocusNode);
-                          //         },
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                          Divider(color: Colors.grey, thickness: 2),
-                          TextFormField(
-                            initialValue:
-                                _formData['title'].toString(), //'teste',
-                            textInputAction: TextInputAction.next,
-                            focusNode: _titleFocusNode,
-                            style: ProductStyles().inputTextStyle(),
-                            decoration: ProductStyles().inputTextDecoration(
-                                'Título', 'Camiseta de Malha Azul...'),
-                            onFieldSubmitted: (_) {
-                              FocusScope.of(context)
-                                  .requestFocus(_subtitleFocusNode);
-                            },
-                            validator: (value) {
-                              return ProductValidators().validateTitle(value);
-                            },
-                            onSaved: (value) => _formData['title'] = value,
-                          ),
-                          TextFormField(
-                            initialValue:
-                                _formData['subtitle'].toString(), //'teste',
-                            // autofocus: true,
-                            textInputAction: TextInputAction.next,
-                            focusNode: _subtitleFocusNode,
-                            style: ProductStyles().inputTextStyle(),
-                            decoration: ProductStyles().inputTextDecoration(
-                                'Subtítulo',
-                                'Lançamento/Ultima unidade/exclusivo...'),
-                            onFieldSubmitted: (_) {
-                              FocusScope.of(context)
-                                  .requestFocus(_priceFocusNode);
-                            },
-                            onSaved: (value) => _formData['subtitle'] = value,
-                          ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                            width: MediaQuery.of(context).size.width,
-                            child: DropdownButtonHideUnderline(
-                              child: ButtonTheme(
-                                layoutBehavior:
-                                    ButtonBarLayoutBehavior.constrained,
-                                minWidth: MediaQuery.of(context).size.width,
-                                child: DropdownButton<String>(
-                                  value: _formData['coin'],
-                                  icon: const Icon(Icons.arrow_downward,
-                                      color: Colors.black),
-                                  iconSize: 24,
-                                  elevation: 0,
-                                  dropdownColor: Colors.black,
-                                  focusNode: _coinFocusNode,
-                                  style: const TextStyle(
-                                      color: AppColors.accentColor),
-                                  underline: Container(
-                                    height: 0,
+                                        ),
+                                      ),
+                                      Divider(color: Colors.grey, thickness: 1),
+                                      TextFormField(
+                                        initialValue:
+                                            double.parse(_formData['price'])
+                                                .toStringAsFixed(2),
+                                        // autofocus: true,
+                                        focusNode: _priceFocusNode,
+                                        textInputAction: TextInputAction.next,
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
+                                        style: ProductStyles().inputTextStyle(),
+                                        decoration: ProductStyles()
+                                            .inputTextDecoration('Preço original',
+                                                'Valor do produto/serviço'),
+                                        onFieldSubmitted: (_) {
+                                          FocusScope.of(context)
+                                              .requestFocus(_promotionFocusNode);
+                                        },
+                                        validator: (val) {
+                                          return ProductValidators()
+                                              .validateCurrency(val);
+                                        },
+                                        onSaved: (value) {
+                                          // double val = double.tryParse(value);
+                                          if (value != null) {
+                                            _formData['price'] = value;
+                                          } else {
+                                            _formData['price'] = 0.00;
+                                          }
+                                        },
+                                      ),
+                                      TextFormField(
+                                        initialValue:
+                                            double.parse(_formData['price'])
+                                                .toStringAsFixed(2),
+                                        // autofocus: true,
+                                        focusNode: _promotionFocusNode,
+                                        textInputAction: TextInputAction.next,
+                                        keyboardType: TextInputType.number,
+                                        style: ProductStyles().inputTextStyle(),
+                                        decoration: ProductStyles()
+                                            .inputTextDecoration(
+                                                'Preço em promoção?',
+                                                'Insira o valor com desconto aqui!'),
+                                        onFieldSubmitted: (_) {
+                                          FocusScope.of(context)
+                                              .requestFocus(_descriptionFocusNode);
+                                        },
+                                        // validator: (val) {
+                                        //   return ProductValidators()
+                                        //       .validateCurrency(val);
+                                        // },
+                                        onSaved: (value) {
+                                          // double val = double.tryParse(value);
+                                          if (value != '') {
+                                            _formData['promotion'] = value;
+                                          } else {
+                                            _formData['promotion'] = 0.00;
+                                          }
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: 12,
+                                      ),
+                                      // P e PP/36 a 44
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Tamanhos",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              letterSpacing: 2,
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  AppColors.astratosDarkGreyColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      ProductSizes(
+                                        context: context,
+                                        initialValue: _formData[
+                                            'sizes'], //snapshot.data["sizes"],
+                                        onSaved: (value) =>
+                                            _formData['sizes'] = value,
+                                        validator: (s) {
+                                          return null;
+                                        },
+                                      ),
+                                      Divider(color: Colors.grey, thickness: 1),
+                                      TextFormField(
+                                        initialValue: _formData['description'],
+                                        // autofocus: true,
+                                        minLines: 1,
+                                        maxLines: 12,
+                                        keyboardType: TextInputType.multiline,
+                                        focusNode: _descriptionFocusNode,
+                                        style: TextStyle(
+                                          letterSpacing: 2,
+                                          color: AppColors.accentColor,
+                                        ),
+                                        decoration: ProductStyles().inputTextDecoration(
+                                            'Descrição',
+                                            'Entregamos por todo DF, de segunda a sábado...'),
+                                        validator: (value) {
+                                          return null;
+                                        },
+                                        onSaved: (value) =>
+                                            _formData['description'] = value,
+                                      ),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty
+                                                  .resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                                  if (states.contains(
+                                                      MaterialState.pressed))
+                                                    return Colors.blue;
+                                                  return Colors
+                                                      .blue; //Color(0xffDDDDDD); // Use the component's default.
+                                                },
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              _saveForm();
+                                            },
+                                            child: Text('Salvar'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  items: <String>['R\$', 'US\$', '€']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String newValue) {
-                                    setState(() {
-                                      _formData['coin'] = newValue;
-                                    });
-                                    FocusScope.of(context)
-                                        .requestFocus(_priceFocusNode);
-                                  },
                                 ),
-                              ),
+                              ],
                             ),
                           ),
-                          Divider(color: Colors.grey, thickness: 2),
-                          TextFormField(
-                            initialValue: _formData['price']
-                                .toString(), //zz?.toStringAsFixed(2),
-                            // autofocus: true,
-                            focusNode: _priceFocusNode,
-                            textInputAction: TextInputAction.next,
-                            keyboardType:
-                                TextInputType.numberWithOptions(decimal: true),
-                            style: ProductStyles().inputTextStyle(),
-                            decoration: ProductStyles().inputTextDecoration(
-                                'Preço original', 'Valor do produto/serviço'),
-                            onFieldSubmitted: (_) {
-                              FocusScope.of(context)
-                                  .requestFocus(_promotionFocusNode);
-                            },
-                            validator: (val) {
-                              return ProductValidators().validateCurrency(val);
-                            },
-                            onSaved: (value) {
-                              double val = double.tryParse(value);
-                              if (val != null) {
-                                _formData['price'] = value;
-                              } else {
-                                _formData['price'] = 0.00;
-                              }
-                            },
-                          ),
-                          TextFormField(
-                            initialValue: _formData['promotion']
-                                .toString(), //?.toStringAsFixed(2),
-                            // autofocus: true,
-                            focusNode: _promotionFocusNode,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                            style: ProductStyles().inputTextStyle(),
-                            decoration: ProductStyles().inputTextDecoration(
-                                'Preço em promoção?',
-                                'Insira o valor com desconto aqui!'),
-                            onFieldSubmitted: (_) {
-                              FocusScope.of(context)
-                                  .requestFocus(_descriptionFocusNode);
-                            },
-                            validator: (val) {
-                              return ProductValidators().validateCurrency(val);
-                            },
-                            onSaved: (value) {
-                              double val = double.tryParse(value);
-                              if (val != null) {
-                                _formData['promotion'] = value;
-                              } else {
-                                _formData['promotion'] = 0.00;
-                              }
-                            },
-                          ),
-                          // P e PP/36 a 44
-                          Text(
-                            "Tamanhos",
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
-                          ProductSizes(
-                            context: context,
-                            initialValue:
-                                _formData['sizes'], //snapshot.data["sizes"],
-                            onSaved: (value) => _formData['sizes'] = value,
-                            validator: (s) {
-                              // if (s.isEmpty)
-                              //   return "";
-                              // else
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            initialValue: _formData['description'],
-                            // autofocus: true,
-                            minLines: 1,
-                            maxLines: 12,
-                            keyboardType: TextInputType.multiline,
-                            focusNode: _descriptionFocusNode,
-                            style: TextStyle(
-                              letterSpacing: 2,
-                              color: AppColors.accentColor,
-                            ),
-                            decoration: ProductStyles().inputTextDecoration(
-                                'Descrição',
-                                'Entregamos por todo DF, de segunda a sábado...'),
-                            validator: (value) {
-                              return null;
-                            },
-                            onSaved: (value) =>
-                                _formData['description'] = value,
-                          ),
-                          SizedBox(height: 128,)
                         ],
                       ),
                     ),
                   ],
                 ),
-              ),
             ),
+          ),
     );
   }
 }

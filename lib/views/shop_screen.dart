@@ -214,134 +214,129 @@ class _ShopScreenState extends State<ShopScreen>
                 child: CircularProgressIndicator(),
               );
             }
-            return Center(
-              child: Container(
-                width: 1000,
-                child: CustomScrollView(
-                  slivers: [
-                    // SliverAppBar(
-                    //   backgroundColor: Colors.transparent,
-                    //   toolbarHeight: 0,
-                    //   elevation: 0,
-                    //   leading: Container(),
-                    //   title: Container(),
-                    //   actions: [],
-                    // ),
-                    SliverAppBar(
-                      floating: true,
-                      snap: true,
-                      backgroundColor: Colors.white,
-                      elevation: 0.0,
-                      toolbarHeight: 40,
-                      expandedHeight: 40,
-                      flexibleSpace: FlexibleSpaceBar(
-                        centerTitle: false,
-                        titlePadding: EdgeInsets.fromLTRB(14.0, 0.0, 12.0, 0.0),
-                        title: Row(
-                          children: [
-                            Text(
-                                snapshotProducts.hasData
-                                    ? snapshotProducts.data.docs[0]
-                                        ['companyTitle']
-                                    : '',
-                                style: TextStyle(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey[800])),
-                            Spacer(),
-                            InkWell(
-                              onTap: () {
-                                toggleDrawer();
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    0.0, 6.0, 0.0, 0.0),
-                                child: Transform(
-                                  alignment: Alignment.center,
-                                  transform: Matrix4.rotationY(math.pi),
-                                  child: NeumorphicIcon(
-                                    MyFlutterApp.sort,
-                                    size: 32,
-                                    style: NeumorphicStyle(
-                                      depth: 1,
-                                      color: AppColors.textColor,
-                                    ),
-                                  ),
+            return CustomScrollView(
+              slivers: [
+                // SliverAppBar(
+                //   backgroundColor: Colors.transparent,
+                //   toolbarHeight: 0,
+                //   elevation: 0,
+                //   leading: Container(),
+                //   title: Container(),
+                //   actions: [],
+                // ),
+                SliverAppBar(
+                  floating: true,
+                  snap: true,
+                  backgroundColor: Colors.white,
+                  elevation: 0.0,
+                  toolbarHeight: 40,
+                  expandedHeight: 40,
+                  flexibleSpace: FlexibleSpaceBar(
+                    centerTitle: false,
+                    titlePadding: EdgeInsets.fromLTRB(14.0, 0.0, 12.0, 0.0),
+                    title: Row(
+                      children: [
+                        Text(
+                            snapshotProducts.hasData
+                                ? snapshotProducts.data.docs[0]
+                                    ['companyTitle']
+                                : '',
+                            style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[800])),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            toggleDrawer();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                0.0, 6.0, 0.0, 0.0),
+                            child: Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.rotationY(math.pi),
+                              child: NeumorphicIcon(
+                                MyFlutterApp.sort,
+                                size: 32,
+                                style: NeumorphicStyle(
+                                  depth: 1,
+                                  color: AppColors.textColor,
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SliverAppBar(
-                      pinned: true,
-                      backgroundColor: Colors.white,
-                      elevation: 0,
-                      toolbarHeight: 66,
-                      // expandedHeight: 186,
-                      // leadingWidth: 0,
-                      // titleSpacing: 100,
-                      titleSpacing: 0,
-                      title: Padding(
-                        padding: EdgeInsets.all(12),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Expanded(
-                            child: TextField(
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                fillColor: Colors.grey[200],
-                                filled: true,
-                                prefixIcon: Icon(Icons.search, size: 24),
-                                // prefixStyle: TextStyle(),
-                                border: InputBorder.none,
-                                // labelText: "Search by Name",
-                                hintText: "Search by Name",
-                                hintStyle: TextStyle(color: Colors.grey),
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                isDense: true,
-                              ),
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black,
                               ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                    // ProductsGrid(snapshotProducts),
-                    SliverPadding(
-                      padding: EdgeInsets.fromLTRB(
-                        8.0,
-                        0.0,
-                        8.0,
-                        8.0,
-                      ),
-                      sliver: SliverGrid(
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 210,
-                          childAspectRatio: 0.70,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            return ProductGridItem(snapshotProducts.data.docs[
-                                index]); //Container(height: 100, color: Colors.red);
-                            // return ChangeNotifierProvider.value(
-                            //   value: products[index],
-                            //   child: ProductGridItem(),
-                            // );
-                          },
-                          childCount: snapshotProducts.data.docs
-                              .length, //products.length, // widget.snapshotProducts.data.docs.length,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                SliverAppBar(
+                  pinned: true,
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  toolbarHeight: 66,
+                  // expandedHeight: 186,
+                  // leadingWidth: 0,
+                  // titleSpacing: 100,
+                  titleSpacing: 0,
+                  title: Padding(
+                    padding: EdgeInsets.all(12),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Expanded(
+                        child: TextField(
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            fillColor: Colors.grey[200],
+                            filled: true,
+                            prefixIcon: Icon(Icons.search, size: 24),
+                            // prefixStyle: TextStyle(),
+                            border: InputBorder.none,
+                            // labelText: "Search by Name",
+                            hintText: "Search by Name",
+                            hintStyle: TextStyle(color: Colors.grey),
+                            contentPadding:
+                                EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            isDense: true,
+                          ),
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // ProductsGrid(snapshotProducts),
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    8.0,
+                    0.0,
+                    8.0,
+                    8.0,
+                  ),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 210,
+                      childAspectRatio: 0.70,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return ProductGridItem(snapshotProducts.data.docs[
+                            index]); //Container(height: 100, color: Colors.red);
+                        // return ChangeNotifierProvider.value(
+                        //   value: products[index],
+                        //   child: ProductGridItem(),
+                        // );
+                      },
+                      childCount: snapshotProducts.data.docs
+                          .length, //products.length, // widget.snapshotProducts.data.docs.length,
+                    ),
+                  ),
+                ),
+              ],
             );
           },
         ),

@@ -41,7 +41,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -91,6 +90,7 @@ import 'dart:math' as math;
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 import 'package:remottely/providers/drawer_provider.dart';
+
 class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<UserRoutePath> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -158,13 +158,35 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
           ),
         if (appState.selectedIndex == 3)
           FadeAnimationPage(
-            child: ProductFormPage('tapanapanterahs','tabacos', null),
+            child: ProductFormPage('tapanapanterahs', 'tabacos', null),
             key: ValueKey('ordersPage'),
           ),
         if (appState.selectedIndex == 4)
           FadeAnimationPage(
             child: Container(),
             key: ValueKey('ProfilePage'),
+          ),
+        if (appState.selectedIndex == 5)
+          FadeAnimationPage(
+            child: Scaffold(
+              appBar: AppBar(
+                leading: ElevatedButton(
+                  onPressed: () {
+                    toggleDrawer();
+                  },
+                  child: Text('ERROR 404'),
+                ),
+              ),
+              body: ElevatedButton(
+                onPressed: () {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  provider.logout();
+                },
+                child: Text('Página não encontrada'),
+              ),
+            ),
+            key: ValueKey('error404Page'),
           ),
       ],
       onPopPage: (route, result) {
