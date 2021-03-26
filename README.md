@@ -1,6 +1,9 @@
 # remottely
 flutter run -d chrome --web-port 8080
 
+# RELOAD VSCODE DART
+cm + shift + p
+
 # path navigation flutter tutorials
 https://www.youtube.com/watch?v=FBoAXUkHu44
 https://medium.com/flutter/learning-flutters-new-navigation-and-routing-system-7c9068155ade
