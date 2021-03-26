@@ -4,17 +4,18 @@ import './router/remottely_app_state.dart';
 import './router/inner_router_delegate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import '../ui/widgets/app_drawer.dart';
 // import 'package:/providers/drawer_provider.dart';
 // import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 // import 'package:/views/control/app_drawer.dart';
 import './router/remottely_route_information_parser.dart';
 
-GlobalKey<ScaffoldState> _appShellScaffoldKey = new GlobalKey<ScaffoldState>();
+GlobalKey<ScaffoldState> appShellScaffoldKey = new GlobalKey<ScaffoldState>();
 toggleDrawer() async {
-  if (_appShellScaffoldKey.currentState.isDrawerOpen) {
-    _appShellScaffoldKey.currentState.openEndDrawer();
+  if (appShellScaffoldKey.currentState.isDrawerOpen) {
+    appShellScaffoldKey.currentState.openEndDrawer();
   } else {
-    _appShellScaffoldKey.currentState.openDrawer();
+    appShellScaffoldKey.currentState.openDrawer();
   }
 }
 
@@ -30,7 +31,7 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
-  // GlobalKey<ScaffoldState> _appShellScaffoldKey =
+  // GlobalKey<ScaffoldState> appShellScaffoldKey =
   //     new GlobalKey<ScaffoldState>();
   final auth = FirebaseAuth.instance;
   InnerRouterDelegate _routerDelegate;
@@ -60,10 +61,10 @@ class _AppShellState extends State<AppShell> {
   }
 
   // toggleDrawer() async {
-  //   if (_appShellScaffoldKey.currentState.isDrawerOpen) {
-  //     _appShellScaffoldKey.currentState.openEndDrawer();
+  //   if (appShellScaffoldKey.currentState.isDrawerOpen) {
+  //     appShellScaffoldKey.currentState.openEndDrawer();
   //   } else {
-  //     _appShellScaffoldKey.currentState.openDrawer();
+  //     appShellScaffoldKey.currentState.openDrawer();
   //   }
   // }
   UserRouteInformationParser _routeInformationParser =
@@ -96,51 +97,61 @@ class _AppShellState extends State<AppShell> {
         width: 1000,
         height: MediaQuery.of(context).size.height,
         child: Scaffold(
-          key: _appShellScaffoldKey,
+          key: appShellScaffoldKey,
           extendBody: true,
+          endDrawer: AppDrawer(),
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            toolbarHeight: 0,
-            elevation: 0,
+            // toolbarHeight: 0,
+            // elevation: 0,
             leading: Container(),
             title: Container(),
-            actions: [],
+            actions: [InkWell(
+                              child: Icon(
+                                Icons.menu,
+                                color: Colors.black,
+                              ),
+                              onTap: () {
+                                appShellScaffoldKey.currentState.openEndDrawer();
+                                // appShellScaffoldKey.currentState.openEndDrawer();
+                              },
+                            ),],
           ),
           // drawer: CustomDrawer(),
           body: Router(
             routerDelegate: _routerDelegate,
             backButtonDispatcher: _backButtonDispatcher,
           ),
-          //   bottomNavigationBar: BottomNavigationBar(
-          //     elevation: 0,
-          //     items: [
-          //       BottomNavigationBarItem(
-          //           icon: Icon(Icons.verified_user, color: Colors.white),
-          //           label: 'users',
-          //           backgroundColor: Colors.yellow[700]),
-          //       BottomNavigationBarItem(
-          //           icon: Icon(Icons.search, color: Colors.white),
-          //           label: 'search',
-          //           backgroundColor: Colors.blue),
-          //       BottomNavigationBarItem(
-          //           icon: Icon(Icons.menu, color: Colors.white),
-          //           label: 'shop',
-          //           backgroundColor: Colors.grey),
-          //       BottomNavigationBarItem(
-          //           icon: Icon(Icons.car_rental, color: Colors.white),
-          //           label: 'orders',
-          //           backgroundColor: Colors.green),
-          //       BottomNavigationBarItem(
-          //           icon: Icon(Icons.supervised_user_circle,
-          //               color: Colors.white),
-          //           label: 'profile',
-          //           backgroundColor: Colors.red),
-          //     ],
-          //     currentIndex: appState.selectedIndex,
-          //     onTap: (newIndex) {
-          //       appState.selectedIndex = newIndex;
-          //     },
-          //   ),
+            bottomNavigationBar: BottomNavigationBar(
+              elevation: 0,
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.verified_user, color: Colors.black),
+                    label: 'users',
+                    backgroundColor: Colors.white),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.search, color: Colors.black),
+                    label: 'search',
+                    backgroundColor: Colors.white),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.menu, color: Colors.black),
+                    label: 'shop',
+                    backgroundColor: Colors.white),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.car_rental, color: Colors.black),
+                    label: 'orders',
+                    backgroundColor: Colors.white),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.supervised_user_circle,
+                        color: Colors.black),
+                    label: 'profile',
+                    backgroundColor: Colors.white),
+              ],
+              currentIndex: appState.selectedIndex,
+              onTap: (newIndex) {
+                appState.selectedIndex = newIndex;
+              },
+            ),
         ),
       ),
     );

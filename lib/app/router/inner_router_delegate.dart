@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import '../app_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '../../ui/views/store/products/store_products_page.dart';
 import '../constants/strings.dart';
 import '../services/firebase_auth_service.dart';
 
@@ -37,7 +37,8 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
         if (appState.selectedIndex == 0)
           FadeAnimationPage(
             key: ValueKey('HomePage'),
-            child: Container(child:Center(child:Text('teste'))),//Container(),
+            child: StorePage(),
+            // Container(child: Center(child: Text('teste'))), //Container(),
           )
         //   ...[
         //   FadeAnimationPage(
@@ -52,26 +53,31 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
         //       key: ValueKey(appState.selectedUser),
         //       child: Container(child:Center(child:Text('teste')))//UserDetailsScreen(user: appState.selectedUser),
         //     ),
-        // ] else 
+        // ] else
         else if (appState.selectedIndex == 1)
           FadeAnimationPage(
             key: ValueKey('SearchPage'),
-            child: Container(child:Center(child:Text('search'))),//ShopScreen(),
+            child:
+                Container(child: Center(child: Text('search'))), //ShopScreen(),
           ),
         if (appState.selectedIndex == 2)
           FadeAnimationPage(
             child: Scaffold(
               appBar: AppBar(
-                leading: ElevatedButton(
-                  onPressed: () {
-                    // toggleDrawer();
+                leading: InkWell(
+                  child: Icon(
+                    Icons.menu,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    appShellScaffoldKey.currentState.openEndDrawer();
+                    // _appShellScaffoldKey.currentState.openEndDrawer();
                   },
-                  child: Text('...'),
                 ),
               ),
               body: ElevatedButton(
                 onPressed: () {
-                   context.read<FirebaseAuthService>().signOut();
+                  context.read<FirebaseAuthService>().signOut();
                   // final provider =
                   //     Provider.of<GoogleSignInProvider>(context, listen: false);
                   // provider.logout();
@@ -83,14 +89,18 @@ class InnerRouterDelegate extends RouterDelegate<UserRoutePath>
           ),
         if (appState.selectedIndex == 3)
           FadeAnimationPage(
-            key: ValueKey('ordersPage'),
-            child: Container(child:Center(child:Text('orders')))//ProductFormPage('tapanapanterahs', 'tabacos', null),
-          ),
+              key: ValueKey('ordersPage'),
+              child: Container(
+                  child: Center(
+                      child: Text(
+                          'orders'))) //ProductFormPage('tapanapanterahs', 'tabacos', null),
+              ),
         if (appState.selectedIndex == 4)
           FadeAnimationPage(
-            key: ValueKey('ProfilePage'),
-            child: Container(child:Center(child:Text('profile')))//Container(),
-          ),
+              key: ValueKey('ProfilePage'),
+              child: Container(
+                  child: Center(child: Text('profile'))) //Container(),
+              ),
         if (appState.selectedIndex == 5)
           FadeAnimationPage(
             child: Scaffold(

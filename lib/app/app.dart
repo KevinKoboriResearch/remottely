@@ -49,6 +49,9 @@ class _MyAppState extends State<MyApp> {
     // );
     return MaterialApp.router(
       // navigatorKey: navigatorKey,
+      theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       debugShowCheckedModeBanner: false,
       title: 'Remottely',
       routerDelegate: _routerDelegate,
